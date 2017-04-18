@@ -1,0 +1,35 @@
+version: '2'
+networks:
+  pelias:
+    driver: bridge
+volumes:
+  esdata:
+    driver: local
+services:
+  baseimage:
+    image: pelias/baseimage
+    container_name: pelias_baseimage
+    build: baseimage
+  schema:
+    depends_on: [ "baseimage" ]
+    image: pelias/schema
+    container_name: pelias_schema
+    build: schema
+    networks: [ "pelias" ]
+  elasticsearch:
+    image: pelias/elasticsearch
+    container_name: pelias_elasticsearch
+    build: elasticsearch/5.2.1
+    restart: always
+    ports: [ "9200:9200" ]
+    volumes: [ "esdata:/usr/share/elasticsearch/data" ]
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+    mem_limit: 1g
+    cap_add: [ "IPC_LOCK" ]
+    networks: [ "pelias" ]
