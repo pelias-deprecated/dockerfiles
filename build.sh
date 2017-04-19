@@ -5,7 +5,7 @@
 docker-compose down || true;
 
 # delete persistent volumes
-docker volume rm 'dockerfiles_esdata'
+docker volume rm 'dockerfiles_esdata';
 
 # rebuild the images
 docker-compose build;
@@ -22,4 +22,7 @@ until $(curl --output /dev/null --silent --head --fail http://localhost:9200); d
 done
 
 # put pelias config / mappings to cluster
-docker-compose run --rm schema node scripts/create_index.js;
+docker-compose run --rm schema bash -c 'node scripts/create_index.js';
+
+# import geonames
+docker-compose run --rm geonames bash -c 'npm run download && npm start';

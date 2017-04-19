@@ -67,6 +67,7 @@ services:
     container_name: pelias_geonames
     build: geonames
     networks: [ "pelias" ]
+    volumes: [ "/data/whosonfirst-data:/data/whosonfirst" ]
   elasticsearch:
     image: pelias/elasticsearch
     container_name: pelias_elasticsearch
