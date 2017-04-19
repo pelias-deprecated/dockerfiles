@@ -2,12 +2,9 @@
 FROM pelias/baseimage
 
 # clone repo
-# RUN git clone https://github.com/pelias/schema.git /code/pelias/schema
-RUN git clone https://github.com/cag/schema.git /code/pelias/schema
-
+RUN git clone https://github.com/pelias/schema.git /code/pelias/schema
 WORKDIR /code/pelias/schema
-RUN git remote add upstream https://github.com/pelias/schema.git
-RUN git pull upstream master
+RUN git checkout 'es5-compat'
 
 # change working dir
 WORKDIR /code/pelias/schema
@@ -16,4 +13,4 @@ WORKDIR /code/pelias/schema
 RUN npm install
 
 # run tests
-# RUN npm test
+RUN npm test
