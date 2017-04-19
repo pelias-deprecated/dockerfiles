@@ -26,5 +26,48 @@
       "host": "elasticsearch",
       "port": 9200
     }]
+  },
+  "interpolation": {
+    "client": {
+      "adapter": "http",
+      "host": "http://interpolation.wiz.co.nz",
+      "timeout": 2500
+    }
+  },
+  "language": {
+    "client": {
+      "adapter": "http",
+      "host": "http://parser.wiz.co.nz",
+      "timeout": 2500
+    }
+  },
+  "api": {
+    "textAnalyzer": "libpostal"
+  },
+  "imports": {
+    "geonames": {
+      "datapath": "./data"
+    },
+    "whosonfirst": {
+      "datapath": "/data/whosonfirst",
+      "importVenues": false,
+      "importPostalcodes": false
+    },
+    "polyline": {
+      "datapath": "/data/polyline",
+      "files": [ "extract.0sv" ]
+    },
+    "openaddresses": {
+      "datapath": "/data/openaddresses",
+      "files": [ "extract.csv" ]
+    },
+    "openstreetmap": {
+      "leveldbpath": "/tmp",
+      "datapath": "/data/openstreetmap",
+      "import": [{
+        "type": { "node": "osmnode", "way": "osmway" },
+        "filename": "extract.osm.pbf"
+      }]
+    }
   }
 }

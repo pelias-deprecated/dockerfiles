@@ -5,6 +5,8 @@ networks:
 volumes:
   esdata:
     driver: local
+  libpostaldata:
+    driver: local
 services:
   baseimage:
     image: pelias/baseimage
@@ -15,6 +17,55 @@ services:
     image: pelias/schema
     container_name: pelias_schema
     build: schema
+    networks: [ "pelias" ]
+  api:
+    depends_on: [ "baseimage" ]
+    image: pelias/api
+    container_name: pelias_api
+    build: api
+    restart: always
+    environment: [ "PORT=4000" ]
+    ports: [ "4000:4000" ]
+    volumes: [ "libpostaldata:/usr/share/libpostal" ]
+    networks: [ "pelias" ]
+  placeholder:
+    depends_on: [ "baseimage" ]
+    image: pelias/placeholder
+    container_name: pelias_placeholder
+    build: placeholder
+    restart: always
+    environment: [ "PORT=4100" ]
+    ports: [ "4100:4100" ]
+    networks: [ "pelias" ]
+  whosonfirst:
+    depends_on: [ "baseimage" ]
+    image: pelias/whosonfirst
+    container_name: pelias_whosonfirst
+    build: whosonfirst
+    networks: [ "pelias" ]
+  openstreetmap:
+    depends_on: [ "baseimage" ]
+    image: pelias/openstreetmap
+    container_name: pelias_openstreetmap
+    build: openstreetmap
+    networks: [ "pelias" ]
+  openaddresses:
+    depends_on: [ "baseimage" ]
+    image: pelias/openaddresses
+    container_name: pelias_openaddresses
+    build: openaddresses
+    networks: [ "pelias" ]
+  polylines:
+    depends_on: [ "baseimage" ]
+    image: pelias/polylines
+    container_name: pelias_polylines
+    build: polylines
+    networks: [ "pelias" ]
+  geonames:
+    depends_on: [ "baseimage" ]
+    image: pelias/geonames
+    container_name: pelias_geonames
+    build: geonames
     networks: [ "pelias" ]
   elasticsearch:
     image: pelias/elasticsearch
