@@ -1,12 +1,6 @@
 xpack.security.enabled: false
-network.host: 'elasticsearch'
-network.publish_host: 'elasticsearch'
+bootstrap.memory_lock: true
+network.host: 0.0.0.0
 http.port: 9200
-transport.host: 'elasticsearch'
-transport.tcp.port: 9300
-transport.publish_host: 'elasticsearch'
 node.master: true
 node.data: true
-bootstrap.memory_lock: true
-discovery.zen.minimum_master_nodes: 1
-discovery.zen.ping.unicast.hosts: 'elasticsearch'
