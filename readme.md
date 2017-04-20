@@ -38,7 +38,7 @@ pelias_whosonfirst     /bin/bash                 Exit 0
 
 ### customizing your configuration
 
-the `pelias.json` file in this repo is mounted inside each container at runtime, you can make modifications to the configuration inside without the need for a rebuild.
+the `pelias.json` file in this repo is mounted inside each container at runtime, you can make modifications to the configuration file locally without the need for a rebuild.
 
 for example, to import Geonames for Singapore with `adminLookup` disabled you could edit the `imports` section to look like:
 

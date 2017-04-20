@@ -28,10 +28,10 @@ services:
     restart: always
     environment: [ "PORT=4000" ]
     ports: [ "4000:4000" ]
+    networks: [ "pelias" ]
     volumes:
       - "./pelias.json:/code/pelias.json"
       - "libpostaldata:/usr/share/libpostal"
-    networks: [ "pelias" ]
   placeholder:
     depends_on: [ "baseimage" ]
     image: pelias/placeholder
@@ -88,6 +88,7 @@ services:
     build: elasticsearch/5.2.1
     restart: always
     ports: [ "9200:9200" ]
+    networks: [ "pelias" ]
     volumes:
       - "esdata:/usr/share/elasticsearch/data"
     ulimits:
@@ -99,4 +100,3 @@ services:
         hard: 65536
     mem_limit: 1g
     cap_add: [ "IPC_LOCK" ]
-    networks: [ "pelias" ]
