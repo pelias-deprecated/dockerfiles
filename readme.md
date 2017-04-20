@@ -46,7 +46,7 @@ each of the containers will be able to access this directory internally as `/dat
 mkdir -p /tmp/data
 ```
 
-if you wish to change the location of your data directory you replace all instances of the path in your `docker-compose.yml`.
+if you wish to change the location of your data directory you can replace all instances of the path in your `docker-compose.yml`.
 
 each importer and service has a range of different options, detailed installation and configuration instructions can be found here: https://github.com/pelias/pelias/blob/master/INSTALL.md
 
