@@ -5,12 +5,6 @@
   },
   "esclient": {
     "apiVersion": "5.0",
-    "keepAlive": true,
-    "requestTimeout": "120000",
-    "maxRetries": "3",
-    "deadTimeout": "10000",
-    "maxSockets": "100",
-    "sniffOnStart": false,
     "hosts": [{
       "env": "development",
       "protocol": "http",
