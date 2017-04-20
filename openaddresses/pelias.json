@@ -1,0 +1,34 @@
+{
+  "logger": {
+    "level": "debug",
+    "timestamp": false
+  },
+  "esclient": {
+    "apiVersion": "5.0",
+    "keepAlive": true,
+    "requestTimeout": "120000",
+    "maxRetries": "3",
+    "deadTimeout": "10000",
+    "maxSockets": "100",
+    "sniffOnStart": false,
+    "hosts": [{
+      "env": "development",
+      "protocol": "http",
+      "host": "elasticsearch",
+      "port": 9200
+    }]
+  },
+  "imports": {
+    "openstreetmap": {
+      "leveldbpath": "/tmp",
+      "datapath": "/data/openstreetmap",
+      "import": [{
+        "type": { "node": "osmnode", "way": "osmway" },
+        "filename": "extract.osm.pbf"
+      }]
+    },
+    "whosonfirst": {
+      "datapath": "/data/whosonfirst"
+    }
+  }
+}

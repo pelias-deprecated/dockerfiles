@@ -1,0 +1,38 @@
+{
+  "logger": {
+    "level": "debug",
+    "timestamp": false
+  },
+  "api": {
+    "textAnalyzer": "libpostal"
+  },
+  "esclient": {
+    "apiVersion": "5.0",
+    "keepAlive": true,
+    "requestTimeout": "120000",
+    "maxRetries": "3",
+    "deadTimeout": "10000",
+    "maxSockets": "100",
+    "sniffOnStart": false,
+    "hosts": [{
+      "env": "development",
+      "protocol": "http",
+      "host": "elasticsearch",
+      "port": 9200
+    }]
+  },
+  "interpolation": {
+    "client": {
+      "adapter": "http",
+      "host": "http://interpolation.wiz.co.nz",
+      "timeout": 2500
+    }
+  },
+  "language": {
+    "client": {
+      "adapter": "http",
+      "host": "http://placeholder:4100",
+      "timeout": 2500
+    }
+  }
+}

@@ -25,4 +25,4 @@ done
 docker-compose run --rm schema bash -c 'node scripts/create_index.js';
 
 # import geonames
-docker-compose run --rm geonames bash -c 'npm run download && npm start';
+# docker-compose run --rm geonames bash -c 'npm run download && npm start';

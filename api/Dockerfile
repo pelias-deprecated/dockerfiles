@@ -37,5 +37,8 @@ RUN npm install
 # run tests
 RUN npm test
 
+# copy pelias config
+ADD 'pelias.json' '/code/pelias.json'
+
 # start service
 CMD [ "npm", "start" ]

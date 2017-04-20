@@ -21,3 +21,6 @@ WORKDIR /code/pelias/geonames
 
 # run tests
 RUN npm test
+
+# copy pelias config
+ADD 'pelias.json' '/code/pelias.json'
