@@ -1,0 +1,70 @@
+{
+  "logger": {
+    "level": "debug",
+    "timestamp": false
+  },
+  "esclient": {
+    "apiVersion": "5.0",
+    "hosts": [{
+      "env": "development",
+      "protocol": "http",
+      "host": "elasticsearch",
+      "port": 9200
+    }]
+  },
+  "elasticsearch": {
+    "settings": {
+      "index": {
+        "refresh_interval": "10s",
+        "number_of_replicas": "0",
+        "number_of_shards": "1"
+      }
+    }
+  },
+  "api": {
+    "textAnalyzer": "libpostal"
+  },
+  "interpolation": {
+    "client": {
+      "adapter": "http",
+      "host": "http://interpolation.wiz.co.nz",
+      "timeout": 2500
+    }
+  },
+  "language": {
+    "client": {
+      "adapter": "http",
+      "host": "http://placeholder:4100",
+      "timeout": 2500
+    }
+  },
+  "imports": {
+    "adminLookup": {
+      "enabled": false
+    },
+    "geonames": {
+      "datapath": "/data/geonames"
+    },
+    "openstreetmap": {
+      "leveldbpath": "/tmp",
+      "datapath": "/data/openstreetmap",
+      "import": [{
+        "type": { "node": "osmnode", "way": "osmway" },
+        "filename": "extract.osm.pbf"
+      }]
+    },
+    "openaddresses": {
+      "datapath": "/data/openaddresses",
+      "files": [ "extract.csv" ]
+    },
+    "polyline": {
+      "datapath": "/data/polyline",
+      "files": [ "extract.0sv" ]
+    },
+    "whosonfirst": {
+      "datapath": "/data/whosonfirst",
+      "importVenues": false,
+      "importPostalcodes": false
+    }
+  }
+}

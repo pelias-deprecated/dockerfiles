@@ -18,15 +18,19 @@ services:
     container_name: pelias_schema
     build: schema
     networks: [ "pelias" ]
+    volumes:
+      - "./pelias.json:/code/pelias.json"
   api:
-    depends_on: [ "baseimage", "elasticsearch", "placeholder" ]
+    depends_on: [ "baseimage", "placeholder" ]
     image: pelias/api
     container_name: pelias_api
     build: api
     restart: always
     environment: [ "PORT=4000" ]
     ports: [ "4000:4000" ]
-    volumes: [ "libpostaldata:/usr/share/libpostal" ]
+    volumes:
+      - "./pelias.json:/code/pelias.json"
+      - "libpostaldata:/usr/share/libpostal"
     networks: [ "pelias" ]
   placeholder:
     depends_on: [ "baseimage" ]
@@ -43,38 +47,49 @@ services:
     container_name: pelias_whosonfirst
     build: whosonfirst
     networks: [ "pelias" ]
+    volumes:
+      - "./pelias.json:/code/pelias.json"
   openstreetmap:
     depends_on: [ "baseimage" ]
     image: pelias/openstreetmap
     container_name: pelias_openstreetmap
     build: openstreetmap
     networks: [ "pelias" ]
+    volumes:
+      - "./pelias.json:/code/pelias.json"
   openaddresses:
     depends_on: [ "baseimage" ]
     image: pelias/openaddresses
     container_name: pelias_openaddresses
     build: openaddresses
     networks: [ "pelias" ]
+    volumes:
+      - "./pelias.json:/code/pelias.json"
   polylines:
     depends_on: [ "baseimage" ]
     image: pelias/polylines
     container_name: pelias_polylines
     build: polylines
     networks: [ "pelias" ]
+    volumes:
+      - "./pelias.json:/code/pelias.json"
   geonames:
     depends_on: [ "baseimage" ]
     image: pelias/geonames
     container_name: pelias_geonames
     build: geonames
     networks: [ "pelias" ]
-    volumes: [ "/data/whosonfirst-data:/data/whosonfirst" ]
+    volumes:
+      - "./pelias.json:/code/pelias.json"
+      - "/data/whosonfirst-data:/data/whosonfirst"
   elasticsearch:
     image: pelias/elasticsearch
     container_name: pelias_elasticsearch
     build: elasticsearch/5.2.1
     restart: always
     ports: [ "9200:9200" ]
-    volumes: [ "esdata:/usr/share/elasticsearch/data" ]
+    volumes:
+      - "esdata:/usr/share/elasticsearch/data"
     ulimits:
       memlock:
         soft: -1

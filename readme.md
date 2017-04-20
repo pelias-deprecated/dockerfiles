@@ -1,8 +1,6 @@
 
 dockerfiles for pelias services
 
-detailed installation instructions can be found here: https://github.com/pelias/pelias/blob/master/INSTALL.md
-
 ### prerequisites
 
 ```
@@ -38,6 +36,28 @@ pelias_schema          /bin/bash                 Exit 0
 pelias_whosonfirst     /bin/bash                 Exit 0
 ```
 
+### customizing your configuration
+
+the `pelias.json` file in this repo is mounted inside each container at runtime, you can make modifications to the configuration inside without the need for a rebuild.
+
+for example, to import Geonames for Singapore with `adminLookup` disabled you could edit the `imports` section to look like:
+
+```javascript
+"imports": {
+  "adminLookup": {
+    "enabled": false
+  },
+  "geonames": {
+    "datapath": "./data",
+    "countryCode": "SG"
+  }
+}
+```
+
+each importer and service has a range of different options, detailed installation and configuration instructions can be found here: https://github.com/pelias/pelias/blob/master/INSTALL.md
+
+for an up-to-date references of supported options you can also view the README files contained in each repository on Github.
+
 ### setting up elasticsearch
 
 the following command will install the pelias schema in elasticsearch:
@@ -55,26 +75,6 @@ the api service should already be running on port 4000.
 you can confirm this worked correctly by visiting http://localhost:4000/v1/search?text=example
 
 ### importing geonames
-
-#### configuring your geonames import
-
-each directory in this repository contains a `pelias.json` file which can be used to configure & customize your build.
-
-for example, to import Singapore with `adminLookup` disabled you could edit the `imports` section to look like:
-
-```javascript
-"imports": {
-  "adminLookup": {
-    "enabled": false
-  },
-  "geonames": {
-    "datapath": "./data",
-    "countryCode": "SG"
-  }
-}
-```
-
-#### running the import
 
 the following command will download & import geonames data:
 
