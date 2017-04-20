@@ -20,9 +20,3 @@ until $(curl --output /dev/null --silent --head --fail http://localhost:9200); d
   printf '.'
   sleep 2
 done
-
-# put pelias config / mappings to cluster
-docker-compose run --rm schema bash -c 'node scripts/create_index.js';
-
-# import geonames
-# docker-compose run --rm geonames bash -c 'npm run download && npm start';

@@ -19,7 +19,7 @@ services:
     build: schema
     networks: [ "pelias" ]
   api:
-    depends_on: [ "baseimage" ]
+    depends_on: [ "baseimage", "elasticsearch", "placeholder" ]
     image: pelias/api
     container_name: pelias_api
     build: api
