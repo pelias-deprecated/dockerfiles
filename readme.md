@@ -1,6 +1,8 @@
 
 dockerfiles for pelias services
 
+detailed installation instructions can be found here: https://github.com/pelias/pelias/blob/master/INSTALL.md
+
 ### prerequisites
 
 ```
