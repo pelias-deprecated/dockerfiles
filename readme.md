@@ -8,7 +8,7 @@ docker: min version xxx
 docker-compose: min version xxx
 ```
 
-### getting up and running
+## getting up and running
 
 the following command will build all the images and containers required:
 
@@ -36,29 +36,23 @@ pelias_schema          /bin/bash                 Exit 0
 pelias_whosonfirst     /bin/bash                 Exit 0
 ```
 
-### customizing your configuration
+#### create a directory for your data
 
-the `pelias.json` file in this repo is mounted inside each container at runtime, you can make modifications to the configuration file locally without the need for a rebuild.
+each of the containers will be able to access this directory internally as `/data`, source data downloaded by the containers will be stored here.
 
-for example, to import Geonames for Singapore with `adminLookup` disabled you could edit the `imports` section to look like:
+> note: the data can be fairly large, make sure you have at minimum ~15GB free space available on this volume
 
-```javascript
-"imports": {
-  "adminLookup": {
-    "enabled": false
-  },
-  "geonames": {
-    "datapath": "./data",
-    "countryCode": "SG"
-  }
-}
+```bash
+mkdir -p /tmp/data
 ```
+
+if you wish to change the location of your data directory you replace all instances of the path in your `docker-compose.yml`.
 
 each importer and service has a range of different options, detailed installation and configuration instructions can be found here: https://github.com/pelias/pelias/blob/master/INSTALL.md
 
 for an up-to-date references of supported options you can also view the README files contained in each repository on Github.
 
-### setting up elasticsearch
+#### setting up elasticsearch
 
 the following command will install the pelias schema in elasticsearch:
 
@@ -68,16 +62,95 @@ docker-compose run --rm schema bash -c 'node scripts/create_index.js'
 
 you can confirm this worked correctly by visiting http://localhost:9200/pelias/_mapping
 
-### checking the api service is running
+#### checking the api service is running
 
 the api service should already be running on port 4000.
 
 you can confirm this worked correctly by visiting http://localhost:4000/v1/search?text=example
 
-### importing geonames
+## importing whosonfirst
 
-the following command will download & import geonames data:
+> note: this guide only covers importing the admin areas (like cities, countries etc.)
+
+#### downloading the data
+
+ensure the data directory exists:
 
 ```bash
-docker-compose run geonames bash -c 'npm run download && npm start'
+mkdir -p /tmp/data/whosonfirst
+```
+
+download the data:
+
+```bash
+docker-compose run --rm whosonfirst bash -c 'node download_data.js'
+```
+
+#### importing the data
+
+import whosonfirst data:
+
+```bash
+docker-compose run --rm whosonfirst bash -c 'npm start'
+```
+
+## importing openstreetmap
+
+#### downloading the data
+
+ensure the data directory exists:
+
+```bash
+mkdir -p /tmp/data/openstreetmap
+```
+
+download the data:
+
+```bash
+wget -qO- https://s3.amazonaws.com/metro-extracts.mapzen.com/singapore.osm.pbf > /tmp/data/openstreetmap/extract.osm.pbf
+```
+
+#### importing the data
+
+import openstreetmap data:
+
+```bash
+docker-compose run --rm openstreetmap bash -c 'npm start'
+```
+
+## importing geonames
+
+#### customizing your configuration
+
+you can restrict the downloader to a single country by adding a `countryCode` property in your `pelias.json`:
+
+```javascript
+"imports": {
+  "geonames": {
+    ...
+    "countryCode": "SG"
+  }
+}
+```
+
+#### downloading the data
+
+ensure the data directory exists:
+
+```bash
+mkdir -p /tmp/data/geonames
+```
+
+download the data:
+
+```bash
+docker-compose run --rm geonames bash -c 'npm run download'
+```
+
+#### importing the data
+
+import geonames data:
+
+```bash
+docker-compose run --rm geonames bash -c 'npm start'
 ```

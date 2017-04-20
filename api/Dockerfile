@@ -27,9 +27,7 @@ RUN git checkout 'libpostal_1.0.0'
 
 # npm apt dependencies
 # note: this is done in one command in order to keep down the size of intermediate containers
-RUN apt-get update && \
-    apt-get install -y python && \
-    rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y python && rm -rf /var/lib/apt/lists/*
 
 # install npm dependencies
 RUN npm install

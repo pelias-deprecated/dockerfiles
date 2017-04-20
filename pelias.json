@@ -43,7 +43,8 @@
       "enabled": false
     },
     "geonames": {
-      "datapath": "/data/geonames"
+      "datapath": "/data/geonames",
+      "countryCode": "ALL"
     },
     "openstreetmap": {
       "leveldbpath": "/tmp",
