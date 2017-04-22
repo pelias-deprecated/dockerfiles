@@ -11,14 +11,15 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*;
 
 # change working dir
-WORKDIR /code/pelias/valhalla
+RUN mkdir -p /code/valhalla
+WORKDIR /code/valhalla
 
 # generate config
 RUN valhalla_build_config \
-  --mjolnir-tile-dir "/data/valhalla" \
-  --mjolnir-tile-extract "/data/valhalla.tar" \
-  --mjolnir-timezone "/data/valhalla/timezones.sqlite" \
-  --mjolnir-admin "/data/valhalla/admins.sqlite" > valhalla.json
+  --mjolnir-tile-dir '/data/valhalla' \
+  --mjolnir-tile-extract '/data/valhalla.tar' \
+  --mjolnir-timezone '/data/valhalla/timezones.sqlite' \
+  --mjolnir-admin '/data/valhalla/admins.sqlite' > valhalla.json
 
 # run server
 # CMD [ "valhalla_route_service", "valhalla.json", "1" ]
