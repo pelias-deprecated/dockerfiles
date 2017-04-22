@@ -3,8 +3,6 @@ networks:
   pelias:
     driver: bridge
 volumes:
-  esdata:
-    driver: local
   libpostaldata:
     driver: local
 services:
@@ -49,7 +47,7 @@ services:
     networks: [ "pelias" ]
     volumes:
       - "./pelias.json:/code/pelias.json"
-      - "/tmp/data:/data"
+      - "${DATA_DIR}:/data"
   openstreetmap:
     depends_on: [ "baseimage" ]
     image: pelias/openstreetmap
@@ -58,7 +56,7 @@ services:
     networks: [ "pelias" ]
     volumes:
       - "./pelias.json:/code/pelias.json"
-      - "/tmp/data:/data"
+      - "${DATA_DIR}:/data"
   openaddresses:
     depends_on: [ "baseimage" ]
     image: pelias/openaddresses
@@ -67,7 +65,7 @@ services:
     networks: [ "pelias" ]
     volumes:
       - "./pelias.json:/code/pelias.json"
-      - "/tmp/data:/data"
+      - "${DATA_DIR}:/data"
   polylines:
     depends_on: [ "baseimage" ]
     image: pelias/polylines
@@ -76,7 +74,7 @@ services:
     networks: [ "pelias" ]
     volumes:
       - "./pelias.json:/code/pelias.json"
-      - "/tmp/data:/data"
+      - "${DATA_DIR}:/data"
   geonames:
     depends_on: [ "baseimage" ]
     image: pelias/geonames
@@ -85,7 +83,7 @@ services:
     networks: [ "pelias" ]
     volumes:
       - "./pelias.json:/code/pelias.json"
-      - "/tmp/data:/data"
+      - "${DATA_DIR}:/data"
   elasticsearch:
     image: pelias/elasticsearch
     container_name: pelias_elasticsearch
@@ -94,7 +92,7 @@ services:
     ports: [ "9200:9200" ]
     networks: [ "pelias" ]
     volumes:
-      - "esdata:/usr/share/elasticsearch/data"
+      - "${DATA_DIR}/elasticsearch:/usr/share/elasticsearch/data"
     ulimits:
       memlock:
         soft: -1

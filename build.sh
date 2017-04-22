@@ -1,11 +1,9 @@
 #!/bin/bash
+[ -z "$DATA_DIR" ] && echo "env var DATA_DIR not set" && exit 1;
 
 # bring containers down
 # note: the -v flag deletes ALL persistent data volumes
 docker-compose down || true;
-
-# delete persistent volumes
-docker volume rm 'dockerfiles_esdata';
 
 # rebuild the images
 docker-compose build;
