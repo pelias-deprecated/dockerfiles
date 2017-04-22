@@ -7,6 +7,16 @@ function trimWofById() {
   find "$DATA_DIR/whosonfirst/meta" -type f -name '*.csv' | xargs sed -i "/\($1\|cessation\)/!d"
 }
 
+function valhallaBuildTiles() {
+  docker-compose run --rm valhalla bash -c \
+    'valhalla_build_tiles -c valhalla.json /data/openstreetmap/extract.osm.pbf'
+}
+
+function valhallaExportEdges() {
+  docker-compose run --rm valhalla bash -c \
+    'valhalla_export_edges --config valhalla.json > /data/polyline/extract.0sv'
+}
+
 function downloadPolylines() {
   wget -O- "$1" | gunzip > "$DATA_DIR/polyline/extract.0sv"
 }
@@ -19,7 +29,8 @@ function downloadPBFExtract() {
 mkdir -p "$DATA_DIR/elasticsearch" \
          "$DATA_DIR/whosonfirst" \
          "$DATA_DIR/polyline" \
-         "$DATA_DIR/openstreetmap";
+         "$DATA_DIR/openstreetmap" \
+         "$DATA_DIR/valhalla";
 
 # run build scripts
 . build.sh;
@@ -33,6 +44,8 @@ docker-compose run --rm whosonfirst bash -c 'npm start'
 
 # import polylines
 # downloadPolylines 'http://missinglink.files.s3.amazonaws.com/berlin.gz';
+# valhallaBuildTiles;
+# valhallaExportEdges;
 docker-compose run --rm polylines bash -c 'npm start'
 
 # import openstreetmap

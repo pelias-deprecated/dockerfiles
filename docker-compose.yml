@@ -84,6 +84,16 @@ services:
     volumes:
       - "./pelias.json:/code/pelias.json"
       - "${DATA_DIR}:/data"
+  valhalla:
+    depends_on: [ "baseimage" ]
+    image: pelias/valhalla
+    container_name: pelias_valhalla
+    build: valhalla
+    restart: always
+    ports: [ "4800:8002" ]
+    networks: [ "pelias" ]
+    volumes:
+      - "${DATA_DIR}:/data"
   elasticsearch:
     image: pelias/elasticsearch
     container_name: pelias_elasticsearch
