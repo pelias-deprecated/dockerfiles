@@ -14,11 +14,5 @@ WORKDIR /code/pelias/whosonfirst
 # install npm dependencies
 RUN npm install
 
-# update dbclient 'elasticsearch' dependency to support es@5
-# @todo: fix and remove this
-WORKDIR /code/pelias/whosonfirst/node_modules/pelias-dbclient
-RUN npm install elasticsearch@latest
-WORKDIR /code/pelias/whosonfirst
-
 # run tests
 RUN npm test
