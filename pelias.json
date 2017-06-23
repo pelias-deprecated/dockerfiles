@@ -4,7 +4,7 @@
     "timestamp": false
   },
   "esclient": {
-    "apiVersion": "2.3",
+    "apiVersion": "5.0",
     "hosts": [{
       "env": "development",
       "protocol": "http",
