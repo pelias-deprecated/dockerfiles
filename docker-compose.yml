@@ -97,7 +97,7 @@ services:
   elasticsearch:
     image: pelias/elasticsearch
     container_name: pelias_elasticsearch
-    build: elasticsearch/5.2.1
+    build: elasticsearch/2.4
     restart: always
     ports: [ "9200:9200" ]
     networks: [ "pelias" ]

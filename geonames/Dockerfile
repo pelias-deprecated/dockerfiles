@@ -13,11 +13,5 @@ RUN npm install
 # update metadata
 RUN npm run download_metadata
 
-# update dbclient 'elasticsearch' dependency to support es@5
-# @todo: fix and remove this
-WORKDIR /code/pelias/geonames/node_modules/pelias-dbclient
-RUN npm install elasticsearch@latest
-WORKDIR /code/pelias/geonames
-
 # run tests
 RUN npm test

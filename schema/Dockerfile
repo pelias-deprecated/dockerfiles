@@ -7,10 +7,6 @@ RUN git clone https://github.com/pelias/schema.git /code/pelias/schema
 # change working dir
 WORKDIR /code/pelias/schema
 
-# switch to custom branch
-# @todo: use master branch once merged
-RUN git checkout 'es5-compat'
-
 # install npm dependencies
 RUN npm install
 
