@@ -50,7 +50,6 @@
       "leveldbpath": "/tmp",
       "datapath": "/data/openstreetmap",
       "import": [{
-        "type": { "node": "osmnode", "way": "osmway" },
         "filename": "extract.osm.pbf"
       }]
     },
