@@ -4,10 +4,10 @@ Dockerfiles for [Pelias](https://github.com/pelias/pelias) services
 ### Prerequisites
 1. Docker version `1.10.1` or later.
 
-1. A `/tmp/data` directory for storing downloaded datasets. Set `DATA_DIR` to the folder's path in `.env` file.
+1. A directory for storing downloaded datasets. Set `DATA_DIR` to the folder's path in `.env` file.
 
 1. **OSX Only**
-  1. In Docker > Preferences > Advanced, set the CPU to `4` and memory to `12 GB`. This ensures that Docker has enough memory to run the imports and API.
+    1. In Docker > Preferences > Advanced, set the CPU to `4` and memory to `12 GB`. This ensures that Docker has enough memory to run the imports and API.
 
 #### Create a Directory for Your Data
 
