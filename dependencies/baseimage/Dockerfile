@@ -38,3 +38,5 @@ ENV NODE_PATH="/usr/local/lib/node_modules:$NODE_PATH"
 # copy pelias config
 ADD 'pelias.json' '/code/pelias.json'
 ENV PELIAS_CONFIG '/code/pelias.json'
+
+RUN cat /code/pelias.json

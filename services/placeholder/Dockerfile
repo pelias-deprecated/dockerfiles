@@ -11,7 +11,7 @@ WORKDIR /code/pelias/placeholder
 RUN npm install
 
 # update source data
-RUN mkdir data && curl -s http://missinglink.geo.s3.amazonaws.com/ph.wof.extract.gz | gunzip > data/wof.extract
+# RUN mkdir data && curl -s http://missinglink.geo.s3.amazonaws.com/ph.wof.extract.gz | gunzip > data/wof.extract
 
 # generate a new build
 RUN npm run build

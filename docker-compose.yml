@@ -10,6 +10,15 @@ services:
     image: pelias/baseimage
     container_name: pelias_baseimage
     build: baseimage
+  source_data:
+    depends_on: [ "baseimage" ]
+    image: pelias/source_data
+    container_name: pelias_source_data
+    build: source_data
+    networks: [ "pelias" ]
+    volumes:
+      - "./pelias.json:/code/pelias.json"
+      - "${DATA_DIR}:/data"
   schema:
     depends_on: [ "baseimage" ]
     image: pelias/schema
@@ -19,7 +28,7 @@ services:
     volumes:
       - "./pelias.json:/code/pelias.json"
   api:
-    depends_on: [ "baseimage", "placeholder" ]
+    depends_on: [ "baseimage", "placeholder", "pip" ]
     image: pelias/api
     container_name: pelias_api
     build: api
@@ -31,7 +40,7 @@ services:
       - "./pelias.json:/code/pelias.json"
       - "libpostaldata:/usr/share/libpostal"
   placeholder:
-    depends_on: [ "baseimage" ]
+    depends_on: [ "baseimage", "source_data" ]
     image: pelias/placeholder
     container_name: pelias_placeholder
     build: placeholder
@@ -39,8 +48,17 @@ services:
     environment: [ "PORT=4100" ]
     ports: [ "4100:4100" ]
     networks: [ "pelias" ]
+  pip:
+      depends_on: [ "baseimage", "source_data" ]
+      image: pelias/pip
+      container_name: pelias_pip
+      build: pip
+      restart: always
+      environment: [ "PORT=4200" ]
+      ports: [ "4200:4200" ]
+      networks: [ "pelias" ]
   whosonfirst:
-    depends_on: [ "baseimage" ]
+    depends_on: [ "baseimage", "source_data" ]
     image: pelias/whosonfirst
     container_name: pelias_whosonfirst
     build: whosonfirst
@@ -49,7 +67,7 @@ services:
       - "./pelias.json:/code/pelias.json"
       - "${DATA_DIR}:/data"
   openstreetmap:
-    depends_on: [ "baseimage" ]
+    depends_on: [ "baseimage", "source_data" ]
     image: pelias/openstreetmap
     container_name: pelias_openstreetmap
     build: openstreetmap
@@ -58,7 +76,7 @@ services:
       - "./pelias.json:/code/pelias.json"
       - "${DATA_DIR}:/data"
   openaddresses:
-    depends_on: [ "baseimage" ]
+    depends_on: [ "baseimage", "source_data" ]
     image: pelias/openaddresses
     container_name: pelias_openaddresses
     build: openaddresses
@@ -66,34 +84,34 @@ services:
     volumes:
       - "./pelias.json:/code/pelias.json"
       - "${DATA_DIR}:/data"
-  polylines:
-    depends_on: [ "baseimage" ]
-    image: pelias/polylines
-    container_name: pelias_polylines
-    build: polylines
-    networks: [ "pelias" ]
-    volumes:
-      - "./pelias.json:/code/pelias.json"
-      - "${DATA_DIR}:/data"
-  geonames:
-    depends_on: [ "baseimage" ]
-    image: pelias/geonames
-    container_name: pelias_geonames
-    build: geonames
-    networks: [ "pelias" ]
-    volumes:
-      - "./pelias.json:/code/pelias.json"
-      - "${DATA_DIR}:/data"
-  valhalla:
-    depends_on: [ "baseimage" ]
-    image: pelias/valhalla
-    container_name: pelias_valhalla
-    build: valhalla
-    restart: always
-    ports: [ "4800:8002" ]
-    networks: [ "pelias" ]
-    volumes:
-      - "${DATA_DIR}:/data"
+#  polylines:
+#    depends_on: [ "baseimage", "source_data" ]
+#    image: pelias/polylines
+#    container_name: pelias_polylines
+#    build: polylines
+#    networks: [ "pelias" ]
+#    volumes:
+#      - "./pelias.json:/code/pelias.json"
+#      - "${DATA_DIR}:/data"
+#  geonames:
+#    depends_on: [ "baseimage", "source_data" ]
+#    image: pelias/geonames
+#    container_name: pelias_geonames
+#    build: geonames
+#    networks: [ "pelias" ]
+#    volumes:
+#      - "./pelias.json:/code/pelias.json"
+#      - "${DATA_DIR}:/data"
+#  valhalla:
+#    depends_on: [ "baseimage", "source_data" ]
+#    image: pelias/valhalla
+#    container_name: pelias_valhalla
+#    build: valhalla
+#    restart: always
+#    ports: [ "4800:8002" ]
+#    networks: [ "pelias" ]
+#    volumes:
+#      - "${DATA_DIR}:/data"
   elasticsearch:
     image: pelias/elasticsearch
     container_name: pelias_elasticsearch
