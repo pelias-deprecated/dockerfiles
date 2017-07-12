@@ -1,10 +1,9 @@
 {
   "logger": {
-    "level": "debug",
+    "level": "info",
     "timestamp": false
   },
   "esclient": {
-    "apiVersion": "5.0",
     "hosts": [{
       "env": "development",
       "protocol": "http",
@@ -28,14 +27,14 @@
         "url": "http://pip:4200"
       },
       "placeholder": {
-        "url": "http://interpolation.wiz.co.nz"
+        "url": "http://placeholder:4100"
       }
     }
   },
   "interpolation": {
     "client": {
       "adapter": "http",
-      "host": "http://interpolation.wiz.co.nz",
+      "host": "http://interpolation:4300",
       "timeout": 2500
     }
   },
@@ -72,8 +71,8 @@
       "files": [ "us/or/portland_metro.csv" ]
     },
     "polyline": {
-      "datapath": "/data/polyline",
-      "files": [ "extract.0sv" ]
+      "datapath": "/data/polylines",
+      "files": [ "pbf_extract.polyline" ]
     },
     "whosonfirst": {
       "datapath": "/data/whosonfirst",

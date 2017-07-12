@@ -11,7 +11,13 @@ RUN git clone https://github.com/pelias/placeholder.git /code/pelias/placeholder
 # change working dir
 WORKDIR /code/pelias/placeholder
 
-ENV WOF_DIR '/data/whosonfirst'
+# configure directories
+RUN mkdir -p '/data/placeholder'
+RUN mkdir -p './data'
+
+ENV WOF_DIR '/data/whosonfirst/data/'
 
 # install npm dependencies
 RUN npm install
+
+CMD [ "/bin/bash", "-c", "bash cmd/wof_extract.sh > data/wof.extract; npm run build; mkdir -p /data/placeholder;  mv data/* /data/placeholder/;" ]

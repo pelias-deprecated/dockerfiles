@@ -13,11 +13,13 @@ RUN npm install
 # update source data
 # RUN mkdir data && curl -s http://missinglink.geo.s3.amazonaws.com/ph.wof.extract.gz | gunzip > data/wof.extract
 
+#RUN mkdir data && cp /data/placeholder/* ./data
+
 # generate a new build
-RUN npm run build
+#RUN npm run build
 
 # run tests
-RUN npm test
+#RUN npm test
 
 # start service
 CMD [ "npm", "start" ]

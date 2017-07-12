@@ -21,5 +21,6 @@ RUN valhalla_build_config \
   --mjolnir-timezone '/data/valhalla/timezones.sqlite' \
   --mjolnir-admin '/data/valhalla/admins.sqlite' > valhalla.json
 
-# run server
-# CMD [ "valhalla_route_service", "valhalla.json", "1" ]
+# run build
+CMD [ "/bin/bash", "-c", "valhalla_build_tiles -c valhalla.json /data/openstreetmap/*.osm.pbf", \
+ "&&", "valhalla_export_edges --config valhalla.json > /data/valhalla/extract.polyline" ]
