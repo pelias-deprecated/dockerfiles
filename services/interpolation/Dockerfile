@@ -1,56 +1,56 @@
 # base image
 FROM pelias/baseimage
 
-VOLUME "/data"
+# libpostal apt dependencies
+# note: this is done in one command in order to keep down the size of intermediate containers
+RUN apt-get update && \
+    apt-get install -y autoconf automake libtool pkg-config && \
+    rm -rf /var/lib/apt/lists/*
 
-# --- locale ---
-RUN apt-get install locales
-RUN locale-gen en_US.UTF-8
-ENV LANG en_US.UTF-8
-ENV LANGUAGE en_US:en
-ENV LC_ALL en_US.UTF-8
-
-# --- libpostal ---
+# install libpostal
+RUN git clone https://github.com/openvenues/libpostal /code/libpostal
+WORKDIR /code/libpostal
+RUN ./bootstrap.sh && \
+    ./configure --datadir=/usr/share/libpostal && \
+    make && make check && make install && \
+    ldconfig
 
 # dependencies
-RUN apt-get install -y curl libsnappy-dev autoconf automake libtool pkg-config git time
+RUN apt-get update && \
+    apt-get install -y python sqlite3 gdal-bin lftp && \
+    rm -rf /var/lib/apt/lists/*
+
+# --- pbf2json ---
 
 # clone
-RUN mkdir -p /usr/src/repos
-WORKDIR /usr/src/repos
-RUN git clone https://github.com/openvenues/libpostal
-
-# build libpostal
-WORKDIR /usr/src/repos/libpostal
-RUN ./bootstrap.sh
-RUN mkdir -p /opt/libpostal_data
-RUN ./configure --datadir=/opt/libpostal_data
-RUN make
-RUN make install
-RUN ldconfig
-
-# --- nodejs ---
-
-# clone
-RUN mkdir -p /usr/src/repos
-WORKDIR /usr/src/repos
-RUN git clone https://github.com/isaacs/nave.git
+RUN git clone https://github.com/pelias/pbf2json.git /code/pbf2json
 
 # install
-WORKDIR /usr/src/repos/nave
-RUN ./nave.sh usemain 4.4.7
+RUN chmod +x /code/pbf2json/build/pbf2json.linux-x64
 
-# --- node app ---
+ENV PBF2JSON_BIN /code/pbf2json/build/pbf2json.linux-x64
 
-# dependencies
-RUN apt-get update && apt-get install -y python sqlite3 gdal-bin
+# location of the openstreetmap data
+ENV PBF2JSON_FILE '/data/openstreetmap/portland_oregon.osm.pbf'
 
-# create app directory
-RUN mkdir -p /usr/src/repos/interpolation
-WORKDIR /usr/src/repos/interpolation
+# location where the db files will be created
+ENV BUILDDIR '/data/interpolation'
 
-# copy source code
-COPY . /usr/src/repos/interpolation
+# location of the polyline data
+ENV POLYLINE_FILE '/data/polylines/pbf_extract.polyline'
+
+# location of the openaddresses data
+ENV OAPATH '/data/openaddresses'
+
+# location of TIGER data
+ENV TIGERPATH '/data/tiger/'
+
+
+# clone app
+RUN git clone https://github.com/pelias/interpolation.git /code/pelias/interpolation
+
+# change working dir
+WORKDIR /code/pelias/interpolation
 
 # Install app dependencies
 RUN npm install
@@ -58,14 +58,8 @@ RUN npm install
 # run tests
 RUN npm test
 
-# expose server port
-ENV PORT=3000
-EXPOSE 3000
-
-# attach data directory
-VOLUME "/data"
-
 # set entry point
-WORKDIR /usr/src/repos/interpolation
-ENTRYPOINT [ "./interpolate" ]
+#ENTRYPOINT [ "./interpolate" ]
+# to build run
+
 CMD [ "server", "/data/address.db", "/data/street.db" ]

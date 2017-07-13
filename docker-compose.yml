@@ -75,6 +75,20 @@ services:
     volumes:
       - "./pelias.json:/code/pelias.json"
       - "libpostaldata:/usr/share/libpostal"
+  interpolation:
+    depends_on: [ "baseimage" ]
+    image: pelias/interpolation
+    container_name: pelias_interpolation
+    build: services/interpolation
+    restart: always
+    environment: [ "PORT=4500" ]
+    ports: [ "4500:4500", "21:21", "20:20" ]
+    networks: [ "pelias" ]
+    volumes:
+      - "./pelias.json:/code/pelias.json"
+      - "/Users/diana/Code/interpolation:/code/pelias/interpolation"
+      - "libpostaldata:/usr/share/libpostal"
+      - "${DATA_DIR}:/data"
   placeholder:
     depends_on: [ "baseimage" ]
     image: pelias/placeholder
