@@ -26,7 +26,11 @@ For an up-to-date references of supported options you can also view the README f
 
 ## Getting Up and Running
 
-The following command will build all the images and containers required:
+First you'll need to create (or edit) the provided `pelias.json` file at the root of the repository.
+This is where you will specify all the details of your desired Pelias instance, such as area of coverage and data sources.
+You can reference the individual data sections below for more details on configuration.
+
+Once that's ready, the following command will build all the images and containers required:
 
 > NOTE: this command can take several hours depending on your network, hardware, and the size of the region of coverage selected in pelais.cofnig.
 
@@ -54,103 +58,151 @@ pelias_schema          /bin/bash                 Exit 0
 pelias_whosonfirst     /bin/bash                 Exit 0
 ```
 
-## Setting Up Elasticsearch
+## Checking that Services are Running
+All the services should be up and running after the build script completes. The ports on which the services run should match
+the configuration in `docker-compose.yml`. You can confirm this worked correctly by visiting each one at the corresponding URLs.
 
-the following command will install the pelias schema in elasticsearch:
+### API 
+http://localhost:4000/v1/search?text=portland
+http://localhost:4000/v1/search?text=1901 Main St
+http://localhost:4000/v1/reverse?point.lon=-122.650095&point.lat=45.533467
 
-```bash
-docker-compose run --rm schema bash -c 'node scripts/create_index.js'
-```
+### Placeholder
+http://localhost:4100/demo/#eng
 
-you can confirm this worked correctly by visiting http://localhost:9200/pelias/_mapping
+### PIP (point in polygon)
+http://localhost:4200/-122.650095/45.533467
 
-#### Checking that API Service is Running
+### Interpolation
+http://localhost:4300/demo/#13/45.5465/-122.6351
 
-the api service should already be running on port 4000.
 
-you can confirm this worked correctly by visiting http://localhost:4000/v1/search?text=example
+## Data Download and Import
 
-## Importing Whosonfirst
-
-> note: this guide only covers importing the admin areas (like cities, countries etc.)
-
-#### Downloading the Data (easy way)
-
-There is a script that is actually used in the build.sh script but can also be executed independently to update the data
+There is a script that is actually used in the `build.sh` script but can also be executed independently to update the data
 and rebuild the ES index and other databases.
 
-Note: if you are going to run it independently, it's important to make sure the docker containers have already been built.
+*Note: if you are going to run it independently, it's important to make sure the docker containers have already been built. 
+This script will also shut down any running services to avoid conflicts during imports.*
 
-It is VERY VERY strongly recommended that you use the `pelias.json` config file to limit the data downloads to a region 
+It is ***VERY VERY*** strongly recommended that you use the `pelias.json` config file to limit the data downloads to a region 
 no larger than a region (state in US). There is too much data in larger regions for a single machine to handle. Also keep in mind
 that the amount of time a download and import will take is directly correlated with the size of the area of coverage.
  
-For OSM data, use `imports.openstreetmap.download[]` (see [openstreetmap repo doc](https://github.com/pelias/openstreetmap#configuration))
-
-For OA data, use `imports.openaddresses.files` (see [openaddresses repo doc](https://github.com/pelias/openaddresses#configuration))
-
-For WOF data, use `imports.whosonfirst.importPlace` (see [whosonfirst repo doc](https://github.com/pelias/whosonfirst#configuration))
-
 For TIGER data, use `imports.interpolation.download.tiger[]` (see [interpolation repo doc](https://github.com/pelias/interpolation#running-a-build-in-the-docker-container))
 
 ```bash
 mdkir -p /tmp/data
+export DATA_DIR=/tmp/data
 sh ./prep_data.sh
 ```
 
-#### Downloading the Data Manually
+### Individual Data Sources
 
-ensure the data directory exists:
+#### Who's on First
 
-```bash
-mkdir -p /tmp/data/whosonfirst
+*note: this guide only covers importing the admin areas (like cities, countries etc.)*
+
+##### configuration
+For WOF data, use `imports.whosonfirst.importPlace` (see [whosonfirst repo doc](https://github.com/pelias/whosonfirst#configuration))
+
+```javascript
+"imports": {
+  "whosonfirst": {
+    "datapath": "/data/whosonfirst",
+    "importVenues": false,
+    "importPostalcodes": true,
+    "importPlace": "101715829",
+    "api_key": "your-mapzen-api-key"
+  }
+}
 ```
 
-download the data:
+##### download
 
 ```bash
-docker-compose run --rm whosonfirst bash -c 'node download_data.js'
+docker-compose run --rm whosonfirst npm run download
 ```
 
-#### Importing the Data
-
-import whosonfirst data:
+##### import
 
 ```bash
 docker-compose run --rm whosonfirst bash -c 'npm start'
 ```
 
-## Importing OpenStreetMap
+#### OpenAddresses
 
-#### Downloading the Data
+##### configuration
+For OA data, use `imports.openaddresses.files` (see [openaddresses repo doc](https://github.com/pelias/openaddresses#configuration))
 
-ensure the data directory exists:
-
-```bash
-mkdir -p /tmp/data/openstreetmap
+```javascript
+"imports": {
+  "openaddresses": {
+    "datapath": "/data/openaddresses",
+    "files": [ "us/or/portland_metro.csv" ]
+  }
+}
 ```
 
-Any `osm.pbf` file will work. A good source is [Metro Extracts](https://mapzen.com/data/metro-extracts/), which has major cities and custom areas. Download and place the file in the data directory above.
+##### download
+```bash
+docker-compose run --rm openaddresses npm run download
+```
 
-Or, download the data (for Singapore):
+##### import
+```bash
+docker-compose run --rm openaddresses npm start
+```
+
+#### OpenStreetMap
+
+Any `osm.pbf` file will work. A good source is [Metro Extracts](https://mapzen.com/data/metro-extracts/), which has 
+major cities and custom areas. Download and place the file in the data directory above.
+
+##### configuration
+Once you find a URL from which you can consistently download the data, specify it in the configuration file and
+the download script will pull it down for you. 
+
+For OSM data, use `imports.openstreetmap.download[]` (see [openstreetmap repo doc](https://github.com/pelias/openstreetmap#configuration))
+
+```javascript
+"imports": {
+  "openstreetmap": {
+    "download": [
+      {
+        "sourceURL": "https://s3.amazonaws.com/metro-extracts.mapzen.com/portland_oregon.osm.pbf"
+      }
+    ],
+    ... 
+  }
+}
+```
+
+###### download
+
+Using the download script in the container:
+
+```bash
+docker-compose run --rm openstreetmap npm run download
+```
+
+Or, download the data by other means such as `wget` (example for Singapore):
 
 ```bash
 wget -qO- https://s3.amazonaws.com/metro-extracts.mapzen.com/singapore.osm.pbf > /tmp/data/openstreetmap/extract.osm.pbf
 ```
 
-#### Importing the Data
-
-import openstreetmap data:
+##### import
 
 ```bash
-docker-compose run --rm openstreetmap bash -c 'npm start'
+docker-compose run --rm openstreetmap npm start
 ```
 
-## Importing Geonames
+#### Geonames
 
-#### Customizing Your Configuration
+##### configuration
 
-you can restrict the downloader to a single country by adding a `countryCode` property in your `pelias.json`:
+You can restrict the downloader to a single country by adding a `countryCode` property in your `pelias.json`:
 
 ```javascript
 "imports": {
@@ -161,54 +213,58 @@ you can restrict the downloader to a single country by adding a `countryCode` pr
 }
 ```
 
-#### Downloading the Data
-
-ensure the data directory exists:
+##### download
 
 ```bash
-mkdir -p /tmp/data/geonames
+docker-compose run --rm geonames npm run download
 ```
 
-download the data:
+#### import
 
 ```bash
-docker-compose run --rm geonames bash -c 'npm run download'
+docker-compose run --rm geonames npm start
 ```
 
-#### Importing the Data
+## Polylines
 
-import geonames data:
-
-```bash
-docker-compose run --rm geonames bash -c 'npm start'
-```
-## Importing Polylines
-
-#### Downloading the Data
-
-ensure the data directory exists:
-
-```bash
-mkdir -p /tmp/data/polyline
-```
-download the data:
-
-The Pelias/Polylines repo has some [polylines extracts](https://github.com/pelias/polylines#download-data). Once you have unzipped the file, specify the name of the polylines data file in your `pelias.json`
+##### configuration
 
 ```javascript
-"imports" : {
+"imports": {
   "polyline": {
-    ...
-    "files": ["san_francisco.polylines"]
+    "datapath": "/data/polylines",
+    "files": ["pbf_extract.polyline"]
   }
-
 }
 ```
-#### Importing the Data
-import polylines data:
+
+##### download
+The extract of the polylines is done using the OSM pbf file so that must be downloaded first. See OpenStreetMap section for details on that.
+Once the pbf extract is in place, run the following command.
+
 ```bash
-docker-compose run --rm polylines bash -c 'PELIAS_CONFIG=/code/pelias.json npm start'
+docker-compose run --rm polylines sh ./docker_extract.sh
 ```
 
-#### Shutting Down and Restarting
-To stop all the containers, `docker-compose down`. Restart all the containers with `docker-compose up`.
+##### import
+
+```bash
+docker-compose run --rm polylines npm run start
+```
+
+## Setting Up Elasticsearch
+
+This will take place as part of the build script, but in the case you'd like to manually manipulate the schema,
+the following command will install the pelias schema in elasticsearch:
+
+```bash
+docker-compose run --rm schema bash -c 'node scripts/create_index.js'
+```
+
+You can confirm this worked correctly by visiting http://localhost:9200/pelias/_mapping
+
+
+## Shutting Down and Restarting
+To stop all the containers, `docker-compose down`. 
+
+Restart all the containers with `docker-compose up` or `sh ./run_services.sh`.
