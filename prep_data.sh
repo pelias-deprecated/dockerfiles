@@ -29,11 +29,15 @@ docker-compose run --rm polylines;
 
 wait;
 
+docker-compose run --rm placeholder npm run extract;
+docker-compose run --rm placeholder npm run build;
+
+wait;
+
 docker-compose run --rm interpolation npm run build &
 docker-compose run --rm whosonfirst npm start &
 docker-compose run --rm openaddresses npm start &
 docker-compose run --rm openstreetmap npm start &
 docker-compose run --rm polylines npm start &
-docker-compose run --rm placeholder &
 
 wait;

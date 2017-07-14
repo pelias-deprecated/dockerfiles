@@ -16,7 +16,7 @@ services:
     container_name: pelias_whosonfirst
     build:
       context: whosonfirst
-      args: [ "REVISION=filtered-download" ]
+      args: [ "REVISION=master" ]
     networks: [ "pelias" ]
     volumes:
       - "./pelias.json:/code/pelias.json"
@@ -39,17 +39,6 @@ services:
     build:
       context: openstreetmap
       args: [ "REVISION=master" ]
-    networks: [ "pelias" ]
-    volumes:
-      - "./pelias.json:/code/pelias.json"
-      - "${DATA_DIR}:/data"
-  placeholder:
-    depends_on: [ "baseimage" ]
-    image: pelias/placeholder
-    container_name: pelias_placeholder
-    build:
-      context: placeholder
-      args: [ "REVISION=production" ]
     networks: [ "pelias" ]
     volumes:
       - "./pelias.json:/code/pelias.json"
@@ -110,14 +99,14 @@ services:
     container_name: pelias_placeholder
     build:
       context: placeholder
-      args: [ "REVISION=production" ]
+      args: [ "REVISION=filtered-download" ]
     restart: always
     environment: [ "PORT=4100" ]
     ports: [ "4100:4100" ]
     networks: [ "pelias" ]
     volumes:
       - "./pelias.json:/code/pelias.json"
-      - "${DATA_DIR}/placeholder:/code/pelias/placeholder/data"
+      - "${DATA_DIR}:/data"
   pip:
     depends_on: [ "baseimage" ]
     image: pelias/pip

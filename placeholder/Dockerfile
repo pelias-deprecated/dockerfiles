@@ -17,13 +17,12 @@ ARG REVISION=production
 # switch to desired revision
 RUN git checkout $REVISION
 
-# configure directories
-RUN mkdir -p '/data/placeholder'
-RUN mkdir -p './data'
-
-ENV WOF_DIR '/data/whosonfirst/data/'
+ENV WOF_DIR '/data/whosonfirst/data'
+ENV PLACEHOLDER_DATA '/data/placeholder'
 
 # install npm dependencies
 RUN npm install
 
-CMD [ "/bin/bash", "-c", "bash cmd/wof_extract.sh > data/wof.extract; npm run build; mkdir -p /data/placeholder;  mv data/* /data/placeholder/;" ]
+RUN export extract_file=${PLACEHOLDER_DATA}/wof.extract
+
+CMD [ "npm", "start" ]
