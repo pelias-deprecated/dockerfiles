@@ -19,3 +19,6 @@ RUN git checkout $REVISION
 
 # install npm dependencies
 RUN npm install
+
+# run tests
+RUN npm test

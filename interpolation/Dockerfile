@@ -22,14 +22,14 @@ RUN apt-get update && \
 
 # --- pbf2json ---
 
-# location of the openstreetmap data
-ENV PBF2JSON_FILE '/data/openstreetmap/portland_oregon.osm.pbf'
-
 # location where the db files will be created
 ENV BUILDDIR '/data/interpolation'
 
-# location of the polyline data
-ENV POLYLINE_FILE '/data/polylines/pbf_extract.polyline'
+# location of the openstreetmap data
+ENV OSMPATH '/data/openstreetmap'
+
+# location of the polylines data
+ENV POLYLINEPATH '/data/polylines'
 
 # location of the openaddresses data
 ENV OAPATH '/data/openaddresses'
@@ -56,5 +56,9 @@ RUN npm install
 
 # run tests
 RUN npm test
+
+# create script for building
+RUN echo 'PBF2JSON_FILE=$(ls ${OSMPATH}/*.osm.pbf | head -n 1); POLYLINE_FILE=$(ls ${POLYLINEPATH}/*.polyline | head -n 1); npm run build' > ./docker_build.sh;
+
 
 CMD [ "./interpolate", "server", "/data/interpolation/address.db", "/data/interpolation/street.db" ]

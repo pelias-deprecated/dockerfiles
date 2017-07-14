@@ -18,5 +18,3 @@ RUN npm install
 
 # run tests
 RUN npm test
-
-CMD ["npm", "run", "create_index"]

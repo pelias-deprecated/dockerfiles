@@ -27,5 +27,4 @@ RUN npm install
 # run tests
 RUN npm test
 
-# generate extract command
-CMD [ "/bin/bash", "-c", "mkdir -p /data/polylines/ && ls /data/openstreetmap/*.osm.pbf | xargs pbf streets > /data/polylines/pbf_extract.polyline" ]
+RUN echo 'mkdir -p /data/polylines/; ls /data/openstreetmap/*.osm.pbf | xargs pbf streets > /data/polylines/pbf_extract.polyline;' > docker_extract.sh
