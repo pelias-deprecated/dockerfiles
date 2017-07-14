@@ -97,8 +97,8 @@ services:
       context: services/interpolation
       args: [ "REVISION=filtered-download" ]
     restart: always
-    environment: [ "PORT=4500" ]
-    ports: [ "4500:4500" ]
+    environment: [ "PORT=4300" ]
+    ports: [ "4300:4300" ]
     networks: [ "pelias" ]
     volumes:
       - "./pelias.json:/code/pelias.json"
