@@ -9,7 +9,7 @@ services:
   baseimage:
     image: pelias/baseimage
     container_name: pelias_baseimage
-    build: dependencies/baseimage
+    build: baseimage
   whosonfirst:
     depends_on: [ "baseimage" ]
     image: pelias/whosonfirst
@@ -135,7 +135,7 @@ services:
   elasticsearch:
     image: pelias/elasticsearch
     container_name: pelias_elasticsearch
-    build: services/elasticsearch/2.4
+    build: elasticsearch/2.4
     restart: always
     ports: [ "9200:9200" ]
     networks: [ "pelias" ]
