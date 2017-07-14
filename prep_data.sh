@@ -27,7 +27,9 @@ wait;
 # but then wait to run the polylines importer process until this is finished
 docker-compose run --rm polylines_data;
 
+wait;
 
+docker-compose run --rm interpolation_data npm run build &
 docker-compose run --rm whosonfirst_data npm start &
 docker-compose run --rm openaddresses_data npm start &
 docker-compose run --rm openstreetmap_data npm start &
