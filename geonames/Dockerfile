@@ -9,7 +9,7 @@ RUN mkdir -p '/data/geonames'
 RUN apt-get update && apt-get install -y bzip2 && apt-get install -y unzip && rm -rf /var/lib/apt/lists/*
 
 # clone repo
-RUN git clone https://github.com/pelias/whosonfirst.git /code/pelias/geonames
+RUN git clone https://github.com/pelias/geonames.git /code/pelias/geonames
 
 # change working dir
 WORKDIR /code/pelias/geonames
