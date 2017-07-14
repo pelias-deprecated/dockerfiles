@@ -27,12 +27,8 @@ wait;
 # but then wait to run the polylines importer process until this is finished
 docker-compose run --rm polylines;
 
-wait;
-
 docker-compose run --rm placeholder npm run extract;
 docker-compose run --rm placeholder npm run build;
-
-wait;
 
 docker-compose run --rm interpolation npm run build &
 docker-compose run --rm whosonfirst npm start &
