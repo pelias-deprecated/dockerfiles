@@ -38,7 +38,7 @@ services:
     container_name: pelias_openstreetmap
     build:
       context: openstreetmap
-      args: [ "REVISION=filtered-download" ]
+      args: [ "REVISION=master" ]
     networks: [ "pelias" ]
     volumes:
       - "./pelias.json:/code/pelias.json"

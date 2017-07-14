@@ -6,7 +6,7 @@
 docker-compose down || true;
 
 # rebuild the images
-docker-compose build --no-cache;
+docker-compose build;
 
 time sh ./prep_data.sh;
 
