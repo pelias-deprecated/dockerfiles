@@ -16,24 +16,24 @@ fi
 docker-compose run --rm schema npm run create_index;
 
 # download all the data to be used by imports
-docker-compose run --rm whosonfirst_data npm run download &
-docker-compose run --rm openaddresses_data npm run download &
-docker-compose run --rm openstreetmap_data npm run download &
+docker-compose run --rm whosonfirst npm run download &
+docker-compose run --rm openaddresses npm run download &
+docker-compose run --rm openstreetmap npm run download &
 docker-compose run --rm interpolation npm run download-tiger &
 
 wait;
 
 # polylines data prep requires openstreetmap data, so wait until that's done to start this
 # but then wait to run the polylines importer process until this is finished
-docker-compose run --rm polylines_data;
+docker-compose run --rm polylines;
 
 wait;
 
-docker-compose run --rm interpolation_data npm run build &
-docker-compose run --rm whosonfirst_data npm start &
-docker-compose run --rm openaddresses_data npm start &
-docker-compose run --rm openstreetmap_data npm start &
-docker-compose run --rm polylines_data npm start &
-docker-compose run --rm placeholder_data &
+docker-compose run --rm interpolation npm run build &
+docker-compose run --rm whosonfirst npm start &
+docker-compose run --rm openaddresses npm start &
+docker-compose run --rm openstreetmap npm start &
+docker-compose run --rm polylines npm start &
+docker-compose run --rm placeholder &
 
 wait;
