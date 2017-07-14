@@ -4,7 +4,7 @@ FROM pelias/baseimage
 # libpostal apt dependencies
 # note: this is done in one command in order to keep down the size of intermediate containers
 RUN apt-get update && \
-    apt-get install -y autoconf automake libtool pkg-config && \
+    apt-get install -y autoconf automake libtool pkg-config python && \
     rm -rf /var/lib/apt/lists/*
 
 # install libpostal
@@ -21,9 +21,11 @@ RUN git clone https://github.com/pelias/api.git /code/pelias/api
 # change working dir
 WORKDIR /code/pelias/api
 
-# npm apt dependencies
-# note: this is done in one command in order to keep down the size of intermediate containers
-RUN apt-get update && apt-get install -y python && rm -rf /var/lib/apt/lists/*
+# consume the build variables
+ARG REVISION=production
+
+# switch to desired revision
+RUN git checkout $REVISION
 
 # install npm dependencies
 RUN npm install

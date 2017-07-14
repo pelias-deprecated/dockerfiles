@@ -4,7 +4,7 @@ FROM pelias/baseimage
 # libpostal apt dependencies
 # note: this is done in one command in order to keep down the size of intermediate containers
 RUN apt-get update && \
-    apt-get install -y autoconf automake libtool pkg-config && \
+    apt-get install -y autoconf automake libtool pkg-config time && \
     rm -rf /var/lib/apt/lists/*
 
 # install libpostal
@@ -17,18 +17,10 @@ RUN ./bootstrap.sh && \
 
 # dependencies
 RUN apt-get update && \
-    apt-get install -y python sqlite3 gdal-bin lftp && \
+    apt-get install -y python sqlite3 gdal-bin lftp unzip pigz && \
     rm -rf /var/lib/apt/lists/*
 
 # --- pbf2json ---
-
-# clone
-RUN git clone https://github.com/pelias/pbf2json.git /code/pbf2json
-
-# install
-RUN chmod +x /code/pbf2json/build/pbf2json.linux-x64
-
-ENV PBF2JSON_BIN /code/pbf2json/build/pbf2json.linux-x64
 
 # location of the openstreetmap data
 ENV PBF2JSON_FILE '/data/openstreetmap/portland_oregon.osm.pbf'
@@ -45,6 +37,7 @@ ENV OAPATH '/data/openaddresses'
 # location of TIGER data
 ENV TIGERPATH '/data/tiger/'
 
+ENV WORKINGDIR '/'
 
 # clone app
 RUN git clone https://github.com/pelias/interpolation.git /code/pelias/interpolation
@@ -52,14 +45,16 @@ RUN git clone https://github.com/pelias/interpolation.git /code/pelias/interpola
 # change working dir
 WORKDIR /code/pelias/interpolation
 
+# consume the build variables
+ARG REVISION=production
+
+# switch to desired revision
+RUN git checkout $REVISION
+
 # Install app dependencies
 RUN npm install
 
 # run tests
 RUN npm test
 
-# set entry point
-#ENTRYPOINT [ "./interpolate" ]
-# to build run
-
-CMD [ "server", "/data/address.db", "/data/street.db" ]
+CMD [ "./interpolate", "server", "/data/interpolation/address.db", "/data/interpolation/street.db" ]

@@ -80,6 +80,18 @@
       "importPostalcodes": true,
       "importPlace": "101715829",
       "api_key": "mapzen-fepXwQF"
+    },
+    "interpolation": {
+      "download": {
+        "tiger": {
+          "datapath": "/data/tiger",
+          "states": [
+            {
+              "state_code": 41
+            }
+          ]
+        }
+      }
     }
   }
 }

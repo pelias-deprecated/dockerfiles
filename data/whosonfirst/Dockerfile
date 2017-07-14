@@ -11,8 +11,11 @@ RUN git clone https://github.com/pelias/whosonfirst.git /code/pelias/whosonfirst
 # change working dir
 WORKDIR /code/pelias/whosonfirst
 
-# TBD: remove this once it's published to npm
-RUN git checkout filtered-download
+# consume the build variables
+ARG REVISION=production
+
+# switch to desired revision
+RUN git checkout $REVISION
 
 # install npm dependencies
 RUN npm install

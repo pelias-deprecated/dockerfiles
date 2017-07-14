@@ -15,6 +15,12 @@ ENV PATH $PATH:$GOROOT/bin:$GOPATH/bin
 
 RUN go get github.com/missinglink/pbf
 
+# consume the build variables
+ARG REVISION=production
+
+# switch to desired revision
+RUN git checkout $REVISION
+
 # install npm dependencies
 RUN npm install
 

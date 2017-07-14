@@ -19,6 +19,7 @@ docker-compose run --rm schema npm run create_index;
 docker-compose run --rm whosonfirst_data npm run download &
 docker-compose run --rm openaddresses_data npm run download &
 docker-compose run --rm openstreetmap_data npm run download &
+docker-compose run --rm interpolation npm run download-tiger &
 
 wait;
 

@@ -11,6 +11,12 @@ RUN git clone https://github.com/pelias/placeholder.git /code/pelias/placeholder
 # change working dir
 WORKDIR /code/pelias/placeholder
 
+# consume the build variables
+ARG REVISION=production
+
+# switch to desired revision
+RUN git checkout $REVISION
+
 # configure directories
 RUN mkdir -p '/data/placeholder'
 RUN mkdir -p './data'

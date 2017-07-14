@@ -11,6 +11,12 @@ RUN git clone https://github.com/pelias/pip-service.git /code/pelias/pip-service
 # change working dir
 WORKDIR /code/pelias/pip-service
 
+# consume the build variables
+ARG REVISION=production
+
+# switch to desired revision
+RUN git checkout $REVISION
+
 # install npm dependencies
 RUN npm install
 
