@@ -10,4 +10,4 @@ docker-compose build --no-cache;
 
 time sh ./prep_data.sh;
 
-time sh ./run.sh;
+time sh ./run_services.sh;

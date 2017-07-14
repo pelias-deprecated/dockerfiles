@@ -10,56 +10,56 @@ services:
     image: pelias/baseimage
     container_name: pelias_baseimage
     build: dependencies/baseimage
-  whosonfirst_data:
+  whosonfirst:
     depends_on: [ "baseimage" ]
-    image: pelias/whosonfirst_data
-    container_name: pelias_whosonfirst_data
+    image: pelias/whosonfirst
+    container_name: pelias_whosonfirst
     build:
-      context: data/whosonfirst
+      context: whosonfirst
       args: [ "REVISION=filtered-download" ]
     networks: [ "pelias" ]
     volumes:
       - "./pelias.json:/code/pelias.json"
       - "${DATA_DIR}:/data"
-  openaddresses_data:
+  openaddresses:
     depends_on: [ "baseimage" ]
-    image: pelias/openaddresses_data
-    container_name: pelias_openaddresses_data
+    image: pelias/openaddresses
+    container_name: pelias_openaddresses
     build:
-      context: data/openaddresses
+      context: openaddresses
       args: [ "REVISION=filtered-download" ]
     networks: [ "pelias" ]
     volumes:
       - "./pelias.json:/code/pelias.json"
       - "${DATA_DIR}:/data"
-  openstreetmap_data:
+  openstreetmap:
     depends_on: [ "baseimage" ]
-    image: pelias/openstreetmap_data
-    container_name: pelias_openstreetmap_data
+    image: pelias/openstreetmap
+    container_name: pelias_openstreetmap
     build:
-      context: data/openstreetmap
+      context: openstreetmap
       args: [ "REVISION=filtered-download" ]
     networks: [ "pelias" ]
     volumes:
       - "./pelias.json:/code/pelias.json"
       - "${DATA_DIR}:/data"
-  placeholder_data:
+  placeholder:
     depends_on: [ "baseimage" ]
-    image: pelias/placeholder_data
-    container_name: pelias_placeholder_data
+    image: pelias/placeholder
+    container_name: pelias_placeholder
     build:
-      context: data/placeholder
+      context: placeholder
       args: [ "REVISION=production" ]
     networks: [ "pelias" ]
     volumes:
       - "./pelias.json:/code/pelias.json"
       - "${DATA_DIR}:/data"
-  polylines_data:
+  polylines:
     depends_on: [ "baseimage" ]
-    image: pelias/polylines_data
-    container_name: pelias_polylines_data
+    image: pelias/polylines
+    container_name: pelias_polylines
     build:
-      context: data/polylines
+      context: polylines
       args: [ "REVISION=production" ]
     networks: [ "pelias" ]
     volumes:
@@ -70,7 +70,7 @@ services:
     image: pelias/schema
     container_name: pelias_schema
     build:
-      context: dependencies/schema
+      context: schema
       args: [ "REVISION=production" ]
     networks: [ "pelias" ]
     volumes:
@@ -80,7 +80,7 @@ services:
     image: pelias/api
     container_name: pelias_api
     build:
-      context: services/api
+      context: api
       args: [ "REVISION=production" ]
     restart: always
     environment: [ "PORT=4000" ]
@@ -94,7 +94,7 @@ services:
     image: pelias/interpolation
     container_name: pelias_interpolation
     build:
-      context: services/interpolation
+      context: interpolation
       args: [ "REVISION=filtered-download" ]
     restart: always
     environment: [ "PORT=4300" ]
@@ -109,7 +109,7 @@ services:
     image: pelias/placeholder
     container_name: pelias_placeholder
     build:
-      context: services/placeholder
+      context: placeholder
       args: [ "REVISION=production" ]
     restart: always
     environment: [ "PORT=4100" ]
@@ -123,7 +123,7 @@ services:
     image: pelias/pip
     container_name: pelias_pip
     build:
-      context: services/pip
+      context: pip
       args: [ "REVISION=production" ]
     restart: always
     environment: [ "PORT=4200" ]
