@@ -19,17 +19,16 @@ Each of the containers will be able to access this directory internally as `/dat
 mkdir -p /tmp/data
 ```
 
-if you wish to change the location of your data directory you can replace all instances of the path in your `docker-compose.yml`.
+If you wish to change the location of your data directory you can simply change the `DATA_DIR` environment variable.
 
-each importer and service has a range of different options, detailed installation and configuration instructions can be found here: https://github.com/pelias/pelias/blob/master/INSTALL.md
-
-for an up-to-date references of supported options you can also view the README files contained in each repository on Github.
+Each importer and service has a range of different options, detailed installation and configuration instructions can be found here: https://github.com/pelias/pelias/blob/master/INSTALL.md
+For an up-to-date references of supported options you can also view the README files contained in each repository on Github.
 
 ## Getting Up and Running
 
-the following command will build all the images and containers required:
+The following command will build all the images and containers required:
 
-> note: this command can take 15-20 minutes depending on your network and hardware.
+> NOTE: this command can take several hours depending on your network, hardware, and the size of the region of coverage selected in pelais.cofnig.
 
 ```bash
 ./build.sh
@@ -44,9 +43,11 @@ $ docker-compose ps
 pelias_api             npm start                 Up       0.0.0.0:4000->4000/tcp           
 pelias_baseimage       /bin/bash                 Exit 0                                    
 pelias_elasticsearch   /bin/bash bin/es-docker   Up       0.0.0.0:9200->9200/tcp, 9300/tcp
-pelias_geonames        /bin/bash                 Exit 0                                    
+pelias_geonames        /bin/bash                 Exit 0
+pelias_interpolation   npm start                 Up       0.0.0.0:4300->4300/tcp
 pelias_openaddresses   /bin/bash                 Exit 0                                    
-pelias_openstreetmap   /bin/bash                 Exit 0                                    
+pelias_openstreetmap   /bin/bash                 Exit 0
+pelias_pip             npm start                 Up       0.0.0.0:4200->4200/tcp
 pelias_placeholder     npm start                 Up       0.0.0.0:4100->4100/tcp           
 pelias_polylines       /bin/bash                 Exit 0                                    
 pelias_schema          /bin/bash                 Exit 0                                    
@@ -73,7 +74,31 @@ you can confirm this worked correctly by visiting http://localhost:4000/v1/searc
 
 > note: this guide only covers importing the admin areas (like cities, countries etc.)
 
-#### Downloading the Data
+#### Downloading the Data (easy way)
+
+There is a script that is actually used in the build.sh script but can also be executed independently to update the data
+and rebuild the ES index and other databases.
+
+Note: if you are going to run it independently, it's important to make sure the docker containers have already been built.
+
+It is VERY VERY strongly recommended that you use the `pelias.json` config file to limit the data downloads to a region 
+no larger than a region (state in US). There is too much data in larger regions for a single machine to handle. Also keep in mind
+that the amount of time a download and import will take is directly correlated with the size of the area of coverage.
+ 
+For OSM data, use `imports.openstreetmap.download[]` (see [openstreetmap repo doc](https://github.com/pelias/openstreetmap#configuration))
+
+For OA data, use `imports.openaddresses.files` (see [openaddresses repo doc](https://github.com/pelias/openaddresses#configuration))
+
+For WOF data, use `imports.whosonfirst.importPlace` (see [whosonfirst repo doc](https://github.com/pelias/whosonfirst#configuration))
+
+For TIGER data, use `imports.interpolation.download.tiger[]` (see [interpolation repo doc](https://github.com/pelias/interpolation#running-a-build-in-the-docker-container))
+
+```bash
+mdkir -p /tmp/data
+sh ./prep_data.sh
+```
+
+#### Downloading the Data Manually
 
 ensure the data directory exists:
 
