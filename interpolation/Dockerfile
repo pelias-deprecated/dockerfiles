@@ -1,23 +1,9 @@
 # base image
-FROM pelias/baseimage
-
-# libpostal apt dependencies
-# note: this is done in one command in order to keep down the size of intermediate containers
-RUN apt-get update && \
-    apt-get install -y autoconf automake libtool pkg-config time && \
-    rm -rf /var/lib/apt/lists/*
-
-# install libpostal
-RUN git clone https://github.com/openvenues/libpostal /code/libpostal
-WORKDIR /code/libpostal
-RUN ./bootstrap.sh && \
-    ./configure --datadir=/usr/share/libpostal && \
-    make && make check && make install && \
-    ldconfig
+FROM pelias/libpostal_baseimage
 
 # dependencies
 RUN apt-get update && \
-    apt-get install -y python sqlite3 gdal-bin lftp unzip pigz && \
+    apt-get install -y python sqlite3 gdal-bin lftp unzip pigz time && \
     rm -rf /var/lib/apt/lists/*
 
 # --- pbf2json ---
@@ -58,7 +44,7 @@ RUN npm install
 RUN npm test
 
 # create script for building
-RUN echo 'PBF2JSON_FILE=$(ls ${OSMPATH}/*.osm.pbf | head -n 1); POLYLINE_FILE=$(ls ${POLYLINEPATH}/*.polyline | head -n 1); npm run build' > ./docker_build.sh;
+RUN echo 'export PBF2JSON_FILE=$(ls ${OSMPATH}/*.osm.pbf | head -n 1); export POLYLINE_FILE=$(ls ${POLYLINEPATH}/*.polyline | head -n 1); npm run build' > ./docker_build.sh;
 
 
 CMD [ "./interpolate", "server", "/data/interpolation/address.db", "/data/interpolation/street.db" ]

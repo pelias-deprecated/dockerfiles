@@ -10,6 +10,10 @@ services:
     image: pelias/baseimage
     container_name: pelias_baseimage
     build: baseimage
+  libpostal_baseimage:
+    image: pelias/libpostal_baseimage
+    container_name: pelias_libpostal_baseimage
+    build: libpostal_baseimage
   schema:
     depends_on: [ "baseimage" ]
     image: pelias/schema
@@ -21,7 +25,7 @@ services:
     volumes:
       - "./pelias.json:/code/pelias.json"
   api:
-    depends_on: [ "baseimage" ]
+    depends_on: [ "baseimage", "libpostal_baseimage" ]
     image: pelias/api
     container_name: pelias_api
     build:
@@ -113,7 +117,7 @@ services:
       - "./pelias.json:/code/pelias.json"
       - "${DATA_DIR}:/data"
   interpolation:
-    depends_on: [ "baseimage" ]
+    depends_on: [ "baseimage", "libpostal_baseimage" ]
     image: pelias/interpolation
     container_name: pelias_interpolation
     build:
