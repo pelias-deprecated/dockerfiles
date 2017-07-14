@@ -8,13 +8,6 @@ docker-compose down || true;
 # rebuild the images
 docker-compose build;
 
-# start the containers
-# note: the -d flag will background the logs
-docker-compose up -d;
+time sh ./prep_data.sh;
 
-# wait for elasticsearch to start up
-echo 'waiting for elasticsearch service to come up';
-until $(curl --output /dev/null --silent --head --fail http://localhost:9200); do
-  printf '.'
-  sleep 2
-done
+time sh ./run_services.sh;

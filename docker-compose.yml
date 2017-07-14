@@ -10,19 +10,27 @@ services:
     image: pelias/baseimage
     container_name: pelias_baseimage
     build: baseimage
+  libpostal_baseimage:
+    image: pelias/libpostal_baseimage
+    container_name: pelias_libpostal_baseimage
+    build: libpostal_baseimage
   schema:
     depends_on: [ "baseimage" ]
     image: pelias/schema
     container_name: pelias_schema
-    build: schema
+    build:
+      context: schema
+      args: [ "REVISION=production" ]
     networks: [ "pelias" ]
     volumes:
       - "./pelias.json:/code/pelias.json"
   api:
-    depends_on: [ "baseimage", "placeholder" ]
+    depends_on: [ "baseimage", "libpostal_baseimage" ]
     image: pelias/api
     container_name: pelias_api
-    build: api
+    build:
+      context: api
+      args: [ "REVISION=production" ]
     restart: always
     environment: [ "PORT=4000" ]
     ports: [ "4000:4000" ]
@@ -34,16 +42,23 @@ services:
     depends_on: [ "baseimage" ]
     image: pelias/placeholder
     container_name: pelias_placeholder
-    build: placeholder
+    build:
+      context: placeholder
+      args: [ "REVISION=filtered-download" ]
     restart: always
     environment: [ "PORT=4100" ]
     ports: [ "4100:4100" ]
     networks: [ "pelias" ]
+    volumes:
+      - "./pelias.json:/code/pelias.json"
+      - "${DATA_DIR}:/data"
   whosonfirst:
     depends_on: [ "baseimage" ]
     image: pelias/whosonfirst
     container_name: pelias_whosonfirst
-    build: whosonfirst
+    build:
+      context: whosonfirst
+      args: [ "REVISION=master" ]
     networks: [ "pelias" ]
     volumes:
       - "./pelias.json:/code/pelias.json"
@@ -52,7 +67,9 @@ services:
     depends_on: [ "baseimage" ]
     image: pelias/openstreetmap
     container_name: pelias_openstreetmap
-    build: openstreetmap
+    build:
+      context: openstreetmap
+      args: [ "REVISION=master" ]
     networks: [ "pelias" ]
     volumes:
       - "./pelias.json:/code/pelias.json"
@@ -61,38 +78,72 @@ services:
     depends_on: [ "baseimage" ]
     image: pelias/openaddresses
     container_name: pelias_openaddresses
-    build: openaddresses
+    build:
+      context: openaddresses
+      args: [ "REVISION=filtered-download" ]
     networks: [ "pelias" ]
     volumes:
       - "./pelias.json:/code/pelias.json"
       - "${DATA_DIR}:/data"
+#  Leave geonames out of the default build, uncomment if desired
+#  geonames:
+#    depends_on: [ "baseimage", "whosonfirst" ]
+#    image: pelias/geonames
+#    container_name: pelias_geonames
+#    build: geonames
+#    networks: [ "pelias" ]
+#    volumes:
+#      - "./pelias.json:/code/pelias.json"
+#      - "${DATA_DIR}:/data"
+#  Use the pbf polyline extractor written by Peter for now because it's much faster
+#  valhalla:
+#    depends_on: [ "baseimage" ]
+#    image: pelias/valhalla
+#    container_name: pelias_valhalla
+#    build: imports/valhalla
+#    restart: always
+#    networks: [ "pelias" ]
+#    volumes:
+#      - "${DATA_DIR}:/data"
   polylines:
     depends_on: [ "baseimage" ]
     image: pelias/polylines
     container_name: pelias_polylines
-    build: polylines
+    build:
+      context: polylines
+      args: [ "REVISION=production" ]
     networks: [ "pelias" ]
     volumes:
       - "./pelias.json:/code/pelias.json"
       - "${DATA_DIR}:/data"
-  geonames:
-    depends_on: [ "baseimage" ]
-    image: pelias/geonames
-    container_name: pelias_geonames
-    build: geonames
-    networks: [ "pelias" ]
-    volumes:
-      - "./pelias.json:/code/pelias.json"
-      - "${DATA_DIR}:/data"
-  valhalla:
-    depends_on: [ "baseimage" ]
-    image: pelias/valhalla
-    container_name: pelias_valhalla
-    build: valhalla
+  interpolation:
+    depends_on: [ "baseimage", "libpostal_baseimage" ]
+    image: pelias/interpolation
+    container_name: pelias_interpolation
+    build:
+      context: interpolation
+      args: [ "REVISION=filtered-download" ]
     restart: always
-    ports: [ "4800:8002" ]
+    environment: [ "PORT=4300" ]
+    ports: [ "4300:4300" ]
     networks: [ "pelias" ]
     volumes:
+      - "./pelias.json:/code/pelias.json"
+      - "libpostaldata:/usr/share/libpostal"
+      - "${DATA_DIR}:/data"
+  pip:
+    depends_on: [ "baseimage" ]
+    image: pelias/pip
+    container_name: pelias_pip
+    build:
+      context: pip
+      args: [ "REVISION=production" ]
+    restart: always
+    environment: [ "PORT=4200" ]
+    ports: [ "4200:4200" ]
+    networks: [ "pelias" ]
+    volumes:
+      - "./pelias.json:/code/pelias.json"
       - "${DATA_DIR}:/data"
   elasticsearch:
     image: pelias/elasticsearch

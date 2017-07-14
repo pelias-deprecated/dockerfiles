@@ -1,10 +1,9 @@
 {
   "logger": {
-    "level": "debug",
+    "level": "info",
     "timestamp": false
   },
   "esclient": {
-    "apiVersion": "2.3",
     "hosts": [{
       "env": "development",
       "protocol": "http",
@@ -22,12 +21,20 @@
     }
   },
   "api": {
-    "textAnalyzer": "libpostal"
+    "textAnalyzer": "libpostal",
+    "services": {
+      "pip": {
+        "url": "http://pip:4200"
+      },
+      "placeholder": {
+        "url": "http://placeholder:4100"
+      }
+    }
   },
   "interpolation": {
     "client": {
       "adapter": "http",
-      "host": "http://interpolation.wiz.co.nz",
+      "host": "http://interpolation:4300",
       "timeout": 2500
     }
   },
@@ -47,24 +54,44 @@
       "countryCode": "ALL"
     },
     "openstreetmap": {
+      "download": [
+        {
+          "sourceURL": "https://s3.amazonaws.com/metro-extracts.mapzen.com/portland_oregon.osm.pbf"
+        }
+      ],
       "leveldbpath": "/tmp",
       "datapath": "/data/openstreetmap",
       "import": [{
-        "filename": "extract.osm.pbf"
+        "type": { "node": "osmnode", "way": "osmway" },
+        "filename": "portland_oregon.osm.pbf"
       }]
     },
     "openaddresses": {
       "datapath": "/data/openaddresses",
-      "files": [ "extract.csv" ]
+      "files": [ "us/or/portland_metro.csv" ]
     },
     "polyline": {
-      "datapath": "/data/polyline",
-      "files": [ "extract.0sv" ]
+      "datapath": "/data/polylines",
+      "files": [ "pbf_extract.polyline" ]
     },
     "whosonfirst": {
       "datapath": "/data/whosonfirst",
       "importVenues": false,
-      "importPostalcodes": false
+      "importPostalcodes": true,
+      "importPlace": "101715829",
+      "api_key": "mapzen-fepXwQF"
+    },
+    "interpolation": {
+      "download": {
+        "tiger": {
+          "datapath": "/data/tiger",
+          "states": [
+            {
+              "state_code": 41
+            }
+          ]
+        }
+      }
     }
   }
 }
