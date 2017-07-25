@@ -32,7 +32,7 @@ You can reference the individual data sections below for more details on configu
 
 Once that's ready, the following command will build all the images and containers required:
 
-> NOTE: this command can take several hours depending on your network, hardware, and the size of the region of coverage selected in pelais.cofnig.
+> NOTE: this command can take several hours depending on your network, hardware, and the size of the region of coverage selected in pelias.json.
 
 ```bash
 ./build.sh
