@@ -62,7 +62,7 @@ pelias_whosonfirst     /bin/bash                 Exit 0
 All the services should be up and running after the build script completes. The ports on which the services run should match
 the configuration in `docker-compose.yml`. You can confirm this worked correctly by visiting each one at the corresponding URLs.
 
-### API 
+### API
 http://localhost:4000/v1/search?text=portland
 http://localhost:4000/v1/search?text=1901 Main St
 http://localhost:4000/v1/reverse?point.lon=-122.650095&point.lat=45.533467
@@ -82,13 +82,13 @@ http://localhost:4300/demo/#13/45.5465/-122.6351
 There is a script that is actually used in the `build.sh` script but can also be executed independently to update the data
 and rebuild the ES index and other databases.
 
-*Note: if you are going to run it independently, it's important to make sure the docker containers have already been built. 
+*Note: if you are going to run it independently, it's important to make sure the docker containers have already been built.
 This script will also shut down any running services to avoid conflicts during imports.*
 
-It is ***VERY VERY*** strongly recommended that you use the `pelias.json` config file to limit the data downloads to a region 
+It is ***VERY VERY*** strongly recommended that you use the `pelias.json` config file to limit the data downloads to a region
 no larger than a region (state in US). There is too much data in larger regions for a single machine to handle. Also keep in mind
 that the amount of time a download and import will take is directly correlated with the size of the area of coverage.
- 
+
 For TIGER data, use `imports.interpolation.download.tiger[]` (see [interpolation repo doc](https://github.com/pelias/interpolation#running-a-build-in-the-docker-container))
 
 ```bash
@@ -156,12 +156,12 @@ docker-compose run --rm openaddresses npm start
 
 #### OpenStreetMap
 
-Any `osm.pbf` file will work. A good source is [Metro Extracts](https://mapzen.com/data/metro-extracts/), which has 
+Any `osm.pbf` file will work. A good source is [Metro Extracts](https://mapzen.com/data/metro-extracts/), which has
 major cities and custom areas. Download and place the file in the data directory above.
 
 ##### configuration
 Once you find a URL from which you can consistently download the data, specify it in the configuration file and
-the download script will pull it down for you. 
+the download script will pull it down for you.
 
 For OSM data, use `imports.openstreetmap.download[]` (see [openstreetmap repo doc](https://github.com/pelias/openstreetmap#configuration))
 
@@ -173,7 +173,7 @@ For OSM data, use `imports.openstreetmap.download[]` (see [openstreetmap repo do
         "sourceURL": "https://s3.amazonaws.com/metro-extracts.mapzen.com/portland_oregon.osm.pbf"
       }
     ],
-    ... 
+    ...
   }
 }
 ```
@@ -265,6 +265,14 @@ You can confirm this worked correctly by visiting http://localhost:9200/pelias/_
 
 
 ## Shutting Down and Restarting
-To stop all the containers, `docker-compose down`. 
+To stop all the containers, `docker-compose down`.
 
 Restart all the containers with `docker-compose up` or `sh ./run_services.sh`.
+
+## Saving docker images as tar files
+
+Docker images can be saved for offline use with the following command:
+
+```bash
+docker images --filter 'reference=pelias/*:latest' --format '{{.Repository}}' | parallel --no-notice docker save -o '{/.}.tar' {}
+```
