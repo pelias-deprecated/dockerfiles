@@ -44,7 +44,7 @@ services:
     container_name: pelias_placeholder
     build:
       context: placeholder
-      args: [ "REVISION=filtered-download" ]
+      args: [ "REVISION=master" ]
     restart: always
     environment: [ "PORT=4100" ]
     ports: [ "4100:4100" ]
@@ -80,7 +80,7 @@ services:
     container_name: pelias_openaddresses
     build:
       context: openaddresses
-      args: [ "REVISION=filtered-download" ]
+      args: [ "REVISION=master" ]
     networks: [ "pelias" ]
     volumes:
       - "./pelias.json:/code/pelias.json"
@@ -122,7 +122,7 @@ services:
     container_name: pelias_interpolation
     build:
       context: interpolation
-      args: [ "REVISION=filtered-download" ]
+      args: [ "REVISION=master" ]
     restart: always
     environment: [ "PORT=4300" ]
     ports: [ "4300:4300" ]
