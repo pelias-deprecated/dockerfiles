@@ -145,12 +145,25 @@ services:
     volumes:
       - "./pelias.json:/code/pelias.json"
       - "${DATA_DIR}:/data"
+  document_service:
+    depends_on: [ "baseimage" ]
+    image: pelias/document_service
+    container_name: pelias_document_service
+    build:
+      context: document_service
+      args: [ "REVISION=hardcode-hosts-for-docker" ]
+    restart: always
+    ports: [ "5000:5000" ]
+    networks: [ "pelias" ]
+    volumes:
+      - "./pelias.json:/code/pelias.json"
+      - "${DATA_DIR}:/data"
   elasticsearch:
     image: pelias/elasticsearch
     container_name: pelias_elasticsearch
     build: elasticsearch/2.4
     restart: always
-    ports: [ "9200:9200" ]
+    ports: [ "9200:9200", "9300:9300" ]
     networks: [ "pelias" ]
     volumes:
       - "${DATA_DIR}/elasticsearch:/usr/share/elasticsearch/data"
