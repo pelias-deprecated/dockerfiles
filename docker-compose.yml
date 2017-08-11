@@ -30,7 +30,7 @@ services:
     container_name: pelias_api
     build:
       context: api
-      args: [ "REVISION=production" ]
+      args: [ "REVISION=master" ]
     restart: always
     environment: [ "PORT=4000" ]
     ports: [ "4000:4000" ]
