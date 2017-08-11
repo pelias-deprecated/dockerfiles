@@ -3,7 +3,10 @@ FROM pelias/baseimage
 
 # downloader apt dependencies
 # note: this is done in one command in order to keep down the size of intermediate containers
-# RUN apt-get update && apt-get install -y bzip2 && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y python3 openjdk-8-jdk gradle python3-pip && rm -rf /var/lib/apt/lists/*
+
+# install python3 dependencies
+RUN pip3 install elasticsearch virtualenv
 
 # clone repo
 RUN git clone https://github.com/pelias/document-service.git /code/pelias/document-service
