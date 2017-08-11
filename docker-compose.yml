@@ -151,7 +151,7 @@ services:
     container_name: pelias_document_service
     build:
       context: document_service
-      args: [ "REVISION=master" ]
+      args: [ "REVISION=hardcode-hosts-for-docker" ]
     restart: always
     ports: [ "5000:5000" ]
     networks: [ "pelias" ]
@@ -163,7 +163,7 @@ services:
     container_name: pelias_elasticsearch
     build: elasticsearch/2.4
     restart: always
-    ports: [ "9200:9200" ]
+    ports: [ "9200:9200", "9300:9300" ]
     networks: [ "pelias" ]
     volumes:
       - "${DATA_DIR}/elasticsearch:/usr/share/elasticsearch/data"
