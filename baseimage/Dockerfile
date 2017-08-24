@@ -2,7 +2,7 @@
 FROM ubuntu:latest
 
 # build variables
-ENV NODE_VERSION='4.4.7'
+ENV NODE_VERSION='4.8.4'
 
 # configure env
 ENV DEBIAN_FRONTEND 'noninteractive'
