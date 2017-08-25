@@ -44,7 +44,7 @@ RUN npm install
 RUN npm test
 
 # create script for building
-RUN echo 'export PBF2JSON_FILE=$(ls ${OSMPATH}/*.osm.pbf | head -n 1); export POLYLINE_FILE=$(ls ${POLYLINEPATH}/*.polyline | head -n 1); npm run build' > ./docker_build.sh;
+RUN echo 'export PBF2JSON_FILE=$(ls ${OSMPATH}/*.osm.pbf | head -n 1); export POLYLINE_FILE=$(ls ${POLYLINEPATH}/*.0sv | head -n 1); npm run build' > ./docker_build.sh;
 
 
 CMD [ "./interpolate", "server", "/data/interpolation/address.db", "/data/interpolation/street.db" ]
