@@ -18,9 +18,6 @@ services:
     depends_on: [ "baseimage" ]
     image: pelias/schema
     container_name: pelias_schema
-    build:
-      context: schema
-      args: [ "REVISION=production" ]
     networks: [ "pelias" ]
     volumes:
       - "./pelias.json:/code/pelias.json"
@@ -28,9 +25,6 @@ services:
     depends_on: [ "baseimage", "libpostal_baseimage" ]
     image: pelias/api
     container_name: pelias_api
-    build:
-      context: api
-      args: [ "REVISION=master" ]
     restart: always
     environment: [ "PORT=4000" ]
     ports: [ "4000:4000" ]
@@ -42,9 +36,6 @@ services:
     depends_on: [ "baseimage" ]
     image: pelias/placeholder
     container_name: pelias_placeholder
-    build:
-      context: placeholder
-      args: [ "REVISION=master" ]
     restart: always
     environment: [ "PORT=4100" ]
     ports: [ "4100:4100" ]
@@ -56,9 +47,6 @@ services:
     depends_on: [ "baseimage" ]
     image: pelias/whosonfirst
     container_name: pelias_whosonfirst
-    build:
-      context: whosonfirst
-      args: [ "REVISION=master" ]
     networks: [ "pelias" ]
     volumes:
       - "./pelias.json:/code/pelias.json"
@@ -67,9 +55,6 @@ services:
     depends_on: [ "baseimage" ]
     image: pelias/openstreetmap
     container_name: pelias_openstreetmap
-    build:
-      context: openstreetmap
-      args: [ "REVISION=master" ]
     networks: [ "pelias" ]
     volumes:
       - "./pelias.json:/code/pelias.json"
@@ -78,9 +63,6 @@ services:
     depends_on: [ "baseimage" ]
     image: pelias/openaddresses
     container_name: pelias_openaddresses
-    build:
-      context: openaddresses
-      args: [ "REVISION=master" ]
     networks: [ "pelias" ]
     volumes:
       - "./pelias.json:/code/pelias.json"
@@ -90,7 +72,6 @@ services:
 #    depends_on: [ "baseimage", "whosonfirst" ]
 #    image: pelias/geonames
 #    container_name: pelias_geonames
-#    build: geonames
 #    networks: [ "pelias" ]
 #    volumes:
 #      - "./pelias.json:/code/pelias.json"
@@ -109,9 +90,6 @@ services:
     depends_on: [ "baseimage" ]
     image: pelias/polylines
     container_name: pelias_polylines
-    build:
-      context: polylines
-      args: [ "REVISION=production" ]
     networks: [ "pelias" ]
     volumes:
       - "./pelias.json:/code/pelias.json"
@@ -120,9 +98,6 @@ services:
     depends_on: [ "baseimage", "libpostal_baseimage" ]
     image: pelias/interpolation
     container_name: pelias_interpolation
-    build:
-      context: interpolation
-      args: [ "REVISION=master" ]
     restart: always
     environment: [ "PORT=4300" ]
     ports: [ "4300:4300" ]
@@ -131,13 +106,10 @@ services:
       - "./pelias.json:/code/pelias.json"
       - "libpostaldata:/usr/share/libpostal"
       - "${DATA_DIR}:/data"
-  pip:
+  pip-service:
     depends_on: [ "baseimage" ]
-    image: pelias/pip
-    container_name: pelias_pip
-    build:
-      context: pip
-      args: [ "REVISION=production" ]
+    image: pelias/pip-service
+    container_name: pelias_pip-service
     restart: always
     environment: [ "PORT=4200" ]
     ports: [ "4200:4200" ]
@@ -145,13 +117,10 @@ services:
     volumes:
       - "./pelias.json:/code/pelias.json"
       - "${DATA_DIR}:/data"
-  document_service:
+  document-service:
     depends_on: [ "baseimage" ]
-    image: pelias/document_service
-    container_name: pelias_document_service
-    build:
-      context: document_service
-      args: [ "REVISION=hardcode-hosts-for-docker" ]
+    image: pelias/document-service
+    container_name: pelias_document-service
     restart: always
     ports: [ "5000:5000" ]
     networks: [ "pelias" ]
