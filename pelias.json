@@ -57,7 +57,7 @@
     },
     "polyline": {
       "datapath": "/data/polylines",
-      "files": [ "pbf_extract.0sv" ]
+      "files": [ "extract.0sv" ]
     },
     "whosonfirst": {
       "datapath": "/data/whosonfirst",
