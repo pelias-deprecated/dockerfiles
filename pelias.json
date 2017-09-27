@@ -24,7 +24,7 @@
         "url": "http://placeholder:4100"
       },
       "pip": {
-        "url": "http://pip:4200"
+        "url": "http://pip-service:4200"
       },
       "interpolation": {
         "url": "http://interpolation:4300"
