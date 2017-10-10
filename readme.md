@@ -1,6 +1,13 @@
 
 Dockerfiles for [Pelias](https://github.com/pelias/pelias) services
 
+## Step-by-step Guide
+
+Check out a [self-contained workshop](how_to_guide.pdf) that explains all the moving parts that make up the Pelias geocoding engine
+and then shows you how to setup a geocoder for a single city or county right on your own machine.
+
+- [Growing Pelias in Containers](how_to_guide.pdf)
+
 ### Prerequisites
 1. Docker version `1.10.1` or later.
 
