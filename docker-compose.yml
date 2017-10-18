@@ -26,7 +26,7 @@ services:
     image: pelias/api
     container_name: pelias_api
     restart: always
-    environment: [ "PORT=4000" ]
+    environment: [ "PORT=4000", "HOST=0.0.0.0" ]
     ports: [ "4000:4000" ]
     networks: [ "pelias" ]
     volumes:
