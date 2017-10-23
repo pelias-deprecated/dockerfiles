@@ -5,8 +5,8 @@
 # note: the -v flag deletes ALL persistent data volumes
 docker-compose down || true;
 
-# rebuild the images
-docker-compose build;
+# pull images from docker hub. Building them manually is not suggested in normal cases
+docker-compose pull;
 
 time sh ./prep_data.sh;
 
