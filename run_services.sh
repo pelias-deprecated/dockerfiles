@@ -18,6 +18,6 @@ fi
 # note: the -d flag will background the logs
 docker-compose up -d interpolation;
 docker-compose up -d placeholder;
-docker-compose up -d pip;
+docker-compose up -d pip-service;
 docker-compose up -d api;
 
