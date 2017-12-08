@@ -17,7 +17,7 @@ services:
     volumes:
       - "./pelias.json:/code/pelias.json"
   api:
-    image: pelias/api
+    image: pelias/api:staging
     container_name: pelias_api
     restart: always
     environment: [ "PORT=4000" ]
