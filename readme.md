@@ -8,6 +8,8 @@ and then shows you how to setup a geocoder for a single city or county right on 
 
 - [Growing Pelias in Containers](how_to_guide.pdf)
 
+**Warning:** Copy/paste from the JSON in this workshop PDF is currently broken. See https://github.com/pelias/dockerfiles/issues/33 for details.
+
 ### Prerequisites
 1. Docker version `1.10.1` or later.
 
