@@ -23,7 +23,7 @@ RUN mkdir -p '/code/pelias'
 VOLUME "/data"
 
 # configure git
-RUN git config --global 'user.email' 'pelias@mapzen.com'
+RUN git config --global 'user.email' 'pelias.team@gmail.com'
 RUN git config --global 'user.name' 'Pelias Docker'
 
 # install nodejs
