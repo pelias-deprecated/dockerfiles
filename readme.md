@@ -44,13 +44,13 @@ Once that's ready, the following command will build all the images and container
 > NOTE: this command can take several hours depending on your network, hardware, and the size of the region of coverage selected in pelias.json.
 
 ```bash
-./build.sh
+export DATA_DIR=/tmp/data && ./build.sh
 ```
 
 once the process is complete you can list the running services:
 
 ```bash
-$ docker-compose ps
+docker-compose ps
         Name                   Command           State                 Ports               
 ------------------------------------------------------------------------------------------
 pelias_api             npm start                 Up       0.0.0.0:4000->4000/tcp           
