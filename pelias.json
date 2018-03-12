@@ -42,7 +42,7 @@
     "openstreetmap": {
       "download": [
         {
-          "sourceURL": "https://s3.amazonaws.com/metro-extracts.mapzen.com/portland_oregon.osm.pbf"
+          "sourceURL": "https://s3.amazonaws.com/metro-extracts.nextzen.org/portland_oregon.osm.pbf"
         }
       ],
       "leveldbpath": "/tmp",
