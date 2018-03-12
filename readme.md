@@ -1,5 +1,10 @@
+# Pelias Dockerfiles
 
-Dockerfiles for [Pelias](https://github.com/pelias/pelias) services
+This is a [Docker Compose](https://github.com/docker/compose#docker-compose) based demo application for running the [Pelias Geocoder](https://github.com/pelias/pelias).
+
+It is configured to set up a geocoder for Portland, Oregon, USA and should be able to do so in about 30 minutes with a fast internet connection.
+
+Many options can be changed to support local development or use for other cities. However, it is not suitable for full planet geocoding installations. For that, see our [install documentation](https://pelias.io/install.html)
 
 ## Step-by-step Guide
 
@@ -13,25 +18,20 @@ and then shows you how to setup a geocoder for a single city or county right on 
 ### Prerequisites
 1. Docker version `1.10.1` or later.
 
-1. A directory for storing downloaded datasets. Set `DATA_DIR` to the folder's path in `.env` file.
+1. A directory for storing downloaded datasets. This directory should have at least 30GB disk space free
 
 1. **OSX Only**
     1. In Docker > Preferences > Advanced, set the CPU to `4` and memory to `12 GB`. This ensures that Docker has enough memory to run the imports and API.
 
 #### Create a Directory for Your Data
 
-Each of the containers will be able to access this directory internally as `/data`, source data downloaded by the containers will be stored here.
-
-> note: the data can be fairly large, make sure you have at minimum ~15GB free space available on this volume
+This is where all the data from OpenStreetMap, OpenAddresses, etc will be downloaded. All of the containers are already configured to use this data.
 
 ```bash
 mkdir -p /tmp/data
 ```
 
-If you wish to change the location of your data directory you can simply change the `DATA_DIR` environment variable.
-
-Each importer and service has a range of different options, detailed installation and configuration instructions can be found here: https://github.com/pelias/pelias/blob/master/INSTALL.md
-For an up-to-date references of supported options you can also view the README files contained in each repository on Github.
+If you wish to change the location of your data directory you can simply change the `DATA_DIR` environment variable defined in the `.env` file.
 
 ## Getting Up and Running
 
@@ -41,16 +41,14 @@ You can reference the individual data sections below for more details on configu
 
 Once that's ready, the following command will build all the images and containers required:
 
-> NOTE: this command can take several hours depending on your network, hardware, and the size of the region of coverage selected in pelias.json.
-
 ```bash
 ./build.sh
 ```
 
-once the process is complete you can list the running services:
+Once the process is complete you can list the running services:
 
 ```bash
-$ docker-compose ps
+docker-compose ps
         Name                   Command           State                 Ports               
 ------------------------------------------------------------------------------------------
 pelias_api             npm start                 Up       0.0.0.0:4000->4000/tcp           
@@ -73,7 +71,9 @@ the configuration in `docker-compose.yml`. You can confirm this worked correctly
 
 ### API
 http://localhost:4000/v1/search?text=portland
+
 http://localhost:4000/v1/search?text=1901 Main St
+
 http://localhost:4000/v1/reverse?point.lon=-122.650095&point.lat=45.533467
 
 ### Placeholder
@@ -88,21 +88,13 @@ http://localhost:4300/demo/#13/45.5465/-122.6351
 
 ## Data Download and Import
 
-There is a script that is actually used in the `build.sh` script but can also be executed independently to update the data
-and rebuild the ES index and other databases.
+You can run `./prep_data.sh`, can be used to download and import data after changing configuration settings or to update existing data.
 
-*Note: if you are going to run it independently, it's important to make sure the docker containers have already been built.
-This script will also shut down any running services to avoid conflicts during imports.*
+Below are configuration options for the various data sources.
 
-It is ***VERY VERY*** strongly recommended that you use the `pelias.json` config file to limit the data downloads to a region
-no larger than a region (state in US). There is too much data in larger regions for a single machine to handle. Also keep in mind
-that the amount of time a download and import will take is directly correlated with the size of the area of coverage.
-
-For TIGER data, use `imports.interpolation.download.tiger[]` (see [interpolation repo doc](https://github.com/pelias/interpolation#running-a-build-in-the-docker-container))
 
 ```bash
 mdkir -p /tmp/data
-export DATA_DIR=/tmp/data
 sh ./prep_data.sh
 ```
 
@@ -121,8 +113,7 @@ For WOF data, use `imports.whosonfirst.importPlace` (see [whosonfirst repo doc](
     "datapath": "/data/whosonfirst",
     "importVenues": false,
     "importPostalcodes": true,
-    "importPlace": "101715829",
-    "api_key": "your-mapzen-api-key"
+    "importPlace": "101715829"
   }
 }
 ```
@@ -198,7 +189,7 @@ docker-compose run --rm openstreetmap npm run download
 Or, download the data by other means such as `wget` (example for Singapore):
 
 ```bash
-wget -qO- https://s3.amazonaws.com/metro-extracts.mapzen.com/singapore.osm.pbf > /tmp/data/openstreetmap/extract.osm.pbf
+wget -qO- https://s3.amazonaws.com/metro-extracts.nextzen.org/singapore.osm.pbf > /tmp/data/openstreetmap/extract.osm.pbf
 ```
 
 ##### import
@@ -260,6 +251,10 @@ docker-compose run --rm polylines sh ./docker_extract.sh
 ```bash
 docker-compose run --rm polylines npm run start
 ```
+
+## Interpolation
+
+The [interpolation engine](https://github.com/pelias/interpolation/) combines OpenStreetMap, OpenAddresses, and TIGER (a USA-only address range dataset). See its project README for more configuration options.
 
 ## Setting Up Elasticsearch
 

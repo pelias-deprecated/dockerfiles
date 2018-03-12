@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# load DATA_DIR and other vars from docker-compose .env file
+export $(cat .env | xargs)
+
 # start elasticsearch if it's not already running
 if ! [ $(curl --output /dev/null --silent --head --fail http://localhost:9200) ]; then
     docker-compose up -d elasticsearch;
