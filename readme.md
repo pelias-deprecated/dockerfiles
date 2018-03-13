@@ -72,7 +72,7 @@ the configuration in `docker-compose.yml`. You can confirm this worked correctly
 ### API
 http://localhost:4000/v1/search?text=portland
 
-http://localhost:4000/v1/search?text=1901 Main St
+[http://localhost:4000/v1/search?text=1901 Main St](http://localhost:4000/v1/search?text=1901 Main St)
 
 http://localhost:4000/v1/reverse?point.lon=-122.650095&point.lat=45.533467
 
@@ -88,10 +88,9 @@ http://localhost:4300/demo/#13/45.5465/-122.6351
 
 ## Data Download and Import
 
-You can run `./prep_data.sh`, can be used to download and import data after changing configuration settings or to update existing data.
+You can run `./prep_data.sh` to download and import data after changing configuration settings or to update existing data.
 
 Below are configuration options for the various data sources.
-
 
 ```bash
 mdkir -p /tmp/data
@@ -156,9 +155,7 @@ docker-compose run --rm openaddresses npm start
 
 #### OpenStreetMap
 
-Any `osm.pbf` file will work. A good source is [Metro Extracts](https://mapzen.com/data/metro-extracts/), which has
-major cities and custom areas. Download and place the file in the data directory above.
-
+Any moderately sized `osm.pbf` file will work.
 ##### configuration
 Once you find a URL from which you can consistently download the data, specify it in the configuration file and
 the download script will pull it down for you.
@@ -170,7 +167,7 @@ For OSM data, use `imports.openstreetmap.download[]` (see [openstreetmap repo do
   "openstreetmap": {
     "download": [
       {
-        "sourceURL": "https://s3.amazonaws.com/metro-extracts.mapzen.com/portland_oregon.osm.pbf"
+        "sourceURL": "https://s3.amazonaws.com/metro-extracts.nextzen.org/portland_oregon.osm.pbf"
       }
     ],
     ...
