@@ -63,8 +63,7 @@
       "datapath": "/data/whosonfirst",
       "importVenues": false,
       "importPostalcodes": true,
-      "importPlace": "101715829",
-      "api_key": "your-api-key"
+      "importPlace": "101715829"
     },
     "interpolation": {
       "download": {
