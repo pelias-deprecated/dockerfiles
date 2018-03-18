@@ -37,45 +37,33 @@
     },
     "geonames": {
       "datapath": "/data/geonames",
-      "countryCode": "ALL"
+      "countryCode": "DE"
     },
     "openstreetmap": {
       "download": [
         {
-          "sourceURL": "https://s3.amazonaws.com/metro-extracts.nextzen.org/portland_oregon.osm.pbf"
+          "sourceURL": "https://download.geofabrik.de/europe/germany/brandenburg-latest.osm.pbf"
         }
       ],
       "leveldbpath": "/tmp",
       "datapath": "/data/openstreetmap",
       "import": [{
-        "filename": "portland_oregon.osm.pbf"
+        "filename": "brandenburg-latest.osm.pbf"
       }]
     },
     "openaddresses": {
       "datapath": "/data/openaddresses",
-      "files": [ "us/or/portland_metro.csv" ]
+      "files": [ "berlin.csv" ]
     },
     "polyline": {
       "datapath": "/data/polylines",
-      "files": [ "extract.0sv" ]
+      "files": [ "brandenburg.polylines" ]
     },
     "whosonfirst": {
       "datapath": "/data/whosonfirst",
       "importVenues": false,
       "importPostalcodes": true,
-      "importPlace": "101715829"
-    },
-    "interpolation": {
-      "download": {
-        "tiger": {
-          "datapath": "/data/tiger",
-          "states": [
-            {
-              "state_code": 41
-            }
-          ]
-        }
-      }
+      "importPlace": "85682499"
     }
   }
 }
