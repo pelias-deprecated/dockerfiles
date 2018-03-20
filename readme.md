@@ -52,7 +52,6 @@ docker-compose ps
         Name                   Command           State                 Ports               
 ------------------------------------------------------------------------------------------
 pelias_api             npm start                 Up       0.0.0.0:4000->4000/tcp           
-pelias_baseimage       /bin/bash                 Exit 0                                    
 pelias_elasticsearch   /bin/bash bin/es-docker   Up       0.0.0.0:9200->9200/tcp, 9300/tcp
 pelias_geonames        /bin/bash                 Exit 0
 pelias_interpolation   npm start                 Up       0.0.0.0:4300->4300/tcp

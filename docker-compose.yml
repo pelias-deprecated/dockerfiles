@@ -6,23 +6,18 @@ volumes:
   libpostaldata:
     driver: local
 services:
-  baseimage:
-    image: pelias/baseimage
-    container_name: pelias_baseimage
-    build: baseimage
   libpostal_baseimage:
     image: pelias/libpostal_baseimage
     container_name: pelias_libpostal_baseimage
     build: libpostal_baseimage
   schema:
-    depends_on: [ "baseimage" ]
     image: pelias/schema
     container_name: pelias_schema
     networks: [ "pelias" ]
     volumes:
       - "./pelias.json:/code/pelias.json"
   api:
-    depends_on: [ "baseimage", "libpostal_baseimage" ]
+    depends_on: [ "libpostal_baseimage" ]
     image: pelias/api
     container_name: pelias_api
     restart: always
@@ -39,7 +34,6 @@ services:
     ports: [ "8080:8080" ]
     networks: [ "pelias" ]
   placeholder:
-    depends_on: [ "baseimage" ]
     image: pelias/placeholder
     container_name: pelias_placeholder
     restart: always
@@ -50,7 +44,6 @@ services:
       - "./pelias.json:/code/pelias.json"
       - "${DATA_DIR}:/data"
   whosonfirst:
-    depends_on: [ "baseimage" ]
     image: pelias/whosonfirst
     container_name: pelias_whosonfirst
     networks: [ "pelias" ]
@@ -58,7 +51,6 @@ services:
       - "./pelias.json:/code/pelias.json"
       - "${DATA_DIR}:/data"
   openstreetmap:
-    depends_on: [ "baseimage" ]
     image: pelias/openstreetmap
     container_name: pelias_openstreetmap
     networks: [ "pelias" ]
@@ -66,7 +58,6 @@ services:
       - "./pelias.json:/code/pelias.json"
       - "${DATA_DIR}:/data"
   openaddresses:
-    depends_on: [ "baseimage" ]
     image: pelias/openaddresses
     container_name: pelias_openaddresses
     networks: [ "pelias" ]
@@ -75,7 +66,7 @@ services:
       - "${DATA_DIR}:/data"
 #  Leave geonames out of the default build, uncomment if desired
 #  geonames:
-#    depends_on: [ "baseimage", "whosonfirst" ]
+#    depends_on: [ "whosonfirst" ]
 #    image: pelias/geonames
 #    container_name: pelias_geonames
 #    networks: [ "pelias" ]
@@ -84,7 +75,6 @@ services:
 #      - "${DATA_DIR}:/data"
 #  Use the pbf polyline extractor written by Peter for now because it's much faster
 #  valhalla:
-#    depends_on: [ "baseimage" ]
 #    image: pelias/valhalla
 #    container_name: pelias_valhalla
 #    build: imports/valhalla
@@ -93,7 +83,6 @@ services:
 #    volumes:
 #      - "${DATA_DIR}:/data"
   polylines:
-    depends_on: [ "baseimage" ]
     image: pelias/polylines
     container_name: pelias_polylines
     networks: [ "pelias" ]
@@ -101,7 +90,7 @@ services:
       - "./pelias.json:/code/pelias.json"
       - "${DATA_DIR}:/data"
   interpolation:
-    depends_on: [ "baseimage", "libpostal_baseimage" ]
+    depends_on: [ "libpostal_baseimage" ]
     image: pelias/interpolation
     container_name: pelias_interpolation
     restart: always
@@ -113,7 +102,6 @@ services:
       - "libpostaldata:/usr/share/libpostal"
       - "${DATA_DIR}:/data"
   pip-service:
-    depends_on: [ "baseimage" ]
     image: pelias/pip-service
     container_name: pelias_pip-service
     restart: always
@@ -124,7 +112,6 @@ services:
       - "./pelias.json:/code/pelias.json"
       - "${DATA_DIR}:/data"
   document-service:
-    depends_on: [ "baseimage" ]
     image: pelias/document-service
     container_name: pelias_document-service
     restart: always
