@@ -32,6 +32,12 @@ services:
     volumes:
       - "./pelias.json:/code/pelias.json"
       - "libpostaldata:/usr/share/libpostal"
+  libpostal:
+    image: pelias/go-whosonfirst-libpostal
+    container_name: pelias_libpostal
+    restart: always
+    ports: [ "8080:8080" ]
+    networks: [ "pelias" ]
   placeholder:
     depends_on: [ "baseimage" ]
     image: pelias/placeholder
