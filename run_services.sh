@@ -22,5 +22,6 @@ fi
 docker-compose up -d interpolation;
 docker-compose up -d placeholder;
 docker-compose up -d pip-service;
+docker-compose up -d libpostal;
 docker-compose up -d api;
 
