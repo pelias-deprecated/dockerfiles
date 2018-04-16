@@ -17,8 +17,7 @@ services:
     volumes:
       - "./pelias.json:/code/pelias.json"
   api:
-    depends_on: [ "libpostal_baseimage" ]
-    image: pelias/api
+    image: pelias/api:staging
     container_name: pelias_api
     restart: always
     environment: [ "PORT=4000" ]
@@ -26,7 +25,6 @@ services:
     networks: [ "pelias" ]
     volumes:
       - "./pelias.json:/code/pelias.json"
-      - "libpostaldata:/usr/share/libpostal"
   libpostal:
     image: pelias/go-whosonfirst-libpostal
     container_name: pelias_libpostal

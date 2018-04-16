@@ -23,6 +23,9 @@
       "placeholder": {
         "url": "http://placeholder:4100"
       },
+      "libpostal": {
+        "url": "http://libpostal:8080"
+      },
       "pip": {
         "url": "http://pip-service:4200"
       },
