@@ -1,10 +1,10 @@
 #!/bin/bash
 set -e;
 
-function elastic_schema_drop(){ docker-compose run -T --rm schema node scripts/drop_index "$@" || true; }
-function elastic_schema_create(){ docker-compose run -T --rm schema npm run create_index; }
-function elastic_start(){ docker-compose up -d elasticsearch; }
-function elastic_stop(){ docker-compose kill elasticsearch; }
+function elastic_schema_drop(){ compose_run 'schema' node scripts/drop_index "$@" || true; }
+function elastic_schema_create(){ compose_run 'schema' npm run create_index; }
+function elastic_start(){ compose_exec up -d elasticsearch; }
+function elastic_stop(){ compose_exec kill elasticsearch; }
 
 register 'elastic' 'drop' 'delete elasticsearch index & all data' elastic_schema_drop
 register 'elastic' 'create' 'create elasticsearch index with pelias mapping' elastic_schema_create

@@ -2,11 +2,11 @@
 set -e;
 
 # per-source imports
-function import_wof(){ docker-compose run -T --rm whosonfirst npm start; }
-function import_oa(){ docker-compose run -T --rm openaddresses npm start; }
-function import_osm(){ docker-compose run -T --rm openstreetmap npm start; }
-function import_polylines(){ docker-compose run -T --rm polylines npm start; }
-function import_transit(){ docker-compose run -T --rm transit npm start; }
+function import_wof(){ compose_run 'whosonfirst' npm start; }
+function import_oa(){ compose_run 'openaddresses' npm start; }
+function import_osm(){ compose_run 'openstreetmap' npm start; }
+function import_polylines(){ compose_run 'polylines' npm start; }
+function import_transit(){ compose_run 'transit' npm start; }
 
 register 'import' 'wof' '(re)import whosonfirst data' import_wof
 register 'import' 'oa' '(re)import openaddresses data' import_oa
