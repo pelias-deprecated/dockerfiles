@@ -21,3 +21,12 @@ function env_load_stream(){
     export "${key}=${value}"
   done
 }
+
+# ensure locale is correctly set?
+# export LC_ALL=en_US.UTF-8
+
+# load DATA_DIR and other vars from docker-compose .env file
+env_load_stream < "${BASEDIR}/.env"
+
+# ensure the user env is correctly set up
+env_check
