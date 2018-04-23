@@ -1,27 +1,20 @@
 #!/bin/bash
+set -e
+BASEDIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+source <(cat ${BASEDIR}/lib/*)
+source <(cat ${BASEDIR}/cmd/*)
 
 # load DATA_DIR and other vars from docker-compose .env file
-export $(cat .env | xargs)
+env_load_stream < "${BASEDIR}/.env"
+
+# ensure the user env is correctly set up
+env_check
 
 # start elasticsearch if it's not already running
-if ! [ $(curl --output /dev/null --silent --head --fail http://localhost:9200) ]; then
-    docker-compose up -d elasticsearch;
-
-    # wait for elasticsearch to start up
-    echo 'waiting for elasticsearch service to come up';
-    until $(curl --output /dev/null --silent --head --fail http://localhost:9200); do
-      printf '.'
-      sleep 2
-    done
+if test $(elastic_status) -ne 200; then
+  elastic_start
+  elastic_wait
 fi
 
-# assuming elasticsearch is already running
-
-# start the containers
-# note: the -d flag will background the logs
-docker-compose up -d interpolation;
-docker-compose up -d placeholder;
-docker-compose up -d pip-service;
-docker-compose up -d libpostal;
-docker-compose up -d api;
-
+# start all services
+docker-compose up -d
