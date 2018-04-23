@@ -7,6 +7,9 @@ BASEDIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 source <(cat ${BASEDIR}/lib/*)
 source <(cat ${BASEDIR}/cmd/*)
 
+# load DATA_DIR and other vars from docker-compose .env file
+env_load_stream < "${BASEDIR}/.env"
+
 # ensure the user env is correctly set up
 env_check
 
