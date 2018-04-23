@@ -6,10 +6,10 @@ function elastic_schema_create(){ docker-compose run -T --rm schema npm run crea
 function elastic_start(){ docker-compose up -d elasticsearch; }
 function elastic_stop(){ docker-compose kill elasticsearch; }
 
-register 'elasticsearch' 'drop' 'delete elasticsearch index & all data' elastic_schema_drop
-register 'elasticsearch' 'create' 'create elasticsearch index with pelias mapping' elastic_schema_create
-register 'elasticsearch' 'start' 'start elasticsearch server' elastic_start
-register 'elasticsearch' 'stop' 'stop elasticsearch server' elastic_stop
+register 'elastic' 'drop' 'delete elasticsearch index & all data' elastic_schema_drop
+register 'elastic' 'create' 'create elasticsearch index with pelias mapping' elastic_schema_create
+register 'elastic' 'start' 'start elasticsearch server' elastic_start
+register 'elastic' 'stop' 'stop elasticsearch server' elastic_stop
 
 # to use this function:
 # if test $(elastic_status) -ne 200; then
@@ -17,7 +17,7 @@ function elastic_status(){ curl --output /dev/null --silent --write-out "%{http_
 
 # the same function but with a trailing newline
 function elastic_status_newline(){ echo $(elastic_status); }
-register 'elasticsearch' 'status' 'HTTP status code of the elasticsearch service' elastic_status_newline
+register 'elastic' 'status' 'HTTP status code of the elasticsearch service' elastic_status_newline
 
 function elastic_wait(){
   echo 'waiting for elasticsearch service to come up';
@@ -28,4 +28,4 @@ function elastic_wait(){
   echo
 }
 
-register 'elasticsearch' 'wait' 'wait for elasticsearch to start up' elastic_wait
+register 'elastic' 'wait' 'wait for elasticsearch to start up' elastic_wait
