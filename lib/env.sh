@@ -1,13 +1,22 @@
 #!/bin/bash
 set -e;
 
+# disable verbose logging
+ENV_DISPLAY_WARNINGS=false
+
 # ensure the user environment is correctly set up
 function env_check(){
   if [ -z "${DATA_DIR}" ]; then
     echo "You must set the DATA_DIR env var to a valid directory on your local machine."
+    echo
+    echo "Edit the '.env' file in this repository, update the DATA_DIR to a valid path and try again."
+    echo "Alternatively, you can set the variable in your environment using a command such as 'export DATA_DIR=/tmp'."
     exit 1
   elif [ ! -d "${DATA_DIR}" ]; then
-    echo "The directory specified by DATA_DIR does not exist."
+    printf "The directory specified by DATA_DIR does not exist: %s\n" ${DATA_DIR}
+    echo
+    echo "Edit the '.env' file in this repository, update the DATA_DIR to a valid path and try again."
+    echo "Alternatively, you can set the variable in your environment using a command such as 'export DATA_DIR=/tmp'."
     exit 1
   fi
 }
@@ -17,8 +26,11 @@ function env_check(){
 function env_load_stream(){
   while IFS='=' read -r key value; do
     ([ -z $key ] || [ -z $value ]) && printf 'Invalid environment var "%s=%s"\n' $key $value && exit 1
-    [ -z ${!key} ] || printf '[warn] skip setting environment var "%s=%s", already set "%s=%s"\n' $key $value $key ${!key}
-    export "${key}=${value}"
+    if [ -z ${!key} ]; then
+      export "${key}=${value}"
+    elif $ENV_DISPLAY_WARNINGS; then
+      printf '[warn] skip setting environment var "%s=%s", already set "%s=%s"\n' $key $value $key ${!key}
+    fi
   done
 }
 
