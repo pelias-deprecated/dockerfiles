@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 BASEDIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
-source <(cat ${BASEDIR}/lib/* ${BASEDIR}/cmd/*)
+for f in ${BASEDIR}/lib/* ${BASEDIR}/cmd/*; do source $f; done
 
 # ensure all docker images are up-to-date
 compose_pull
