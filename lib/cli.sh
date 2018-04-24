@@ -25,8 +25,8 @@ function help(){
 }
 
 function cli(){
-  cmd="${1,,}"; shift || true
-  action="${1,,}"; shift || true
+  cmd="${1}"; shift || true
+  action="${1}"; shift || true
   valid_command=false
   valid_action=false
 
