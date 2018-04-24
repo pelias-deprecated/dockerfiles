@@ -15,7 +15,7 @@ register 'import' 'polylines' '(re)import polylines data' import_polylines
 register 'import' 'transit' '(re)import transit data' import_transit
 
 # import all the data to be used by imports
-# note: running these in parallel requires a large amount of RAM (so we dont)
+# note: running importers in parallel can cause issues due to high CPU & RAM requirements.
 function import_all(){
   import_wof
   import_oa
