@@ -23,6 +23,7 @@ docker-compose run --rm whosonfirst npm run download &
 docker-compose run --rm openaddresses npm run download &
 docker-compose run --rm openstreetmap npm run download &
 docker-compose run --rm interpolation npm run download-tiger &
+docker-compose run --rm geonames npm run download &
 
 wait
 
@@ -39,5 +40,6 @@ docker-compose run --rm whosonfirst npm start
 docker-compose run --rm openaddresses npm start
 docker-compose run --rm openstreetmap npm start
 docker-compose run --rm polylines npm start
+docker-compose run --rm geonames npm start
 
 wait

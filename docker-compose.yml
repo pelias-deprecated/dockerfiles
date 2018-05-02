@@ -62,15 +62,13 @@ services:
     volumes:
       - "./pelias.json:/code/pelias.json"
       - "${DATA_DIR}:/data"
-#  Leave geonames out of the default build, uncomment if desired
-#  geonames:
-#    depends_on: [ "whosonfirst" ]
-#    image: pelias/geonames
-#    container_name: pelias_geonames
-#    networks: [ "pelias" ]
-#    volumes:
-#      - "./pelias.json:/code/pelias.json"
-#      - "${DATA_DIR}:/data"
+  geonames:
+    image: pelias/geonames
+    container_name: pelias_geonames
+    networks: [ "pelias" ]
+    volumes:
+      - "./pelias.json:/code/pelias.json"
+      - "${DATA_DIR}:/data"
 #  Use the pbf polyline extractor written by Peter for now because it's much faster
 #  valhalla:
 #    image: pelias/valhalla
