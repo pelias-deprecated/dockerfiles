@@ -41,11 +41,11 @@ function env_load_stream(){
 [ -f .env ] && env_load_stream < .env
 
 # use the default compose file unless one was specified
-if [ -z "${COMPOSE_FILE}" ]; then
-  if [ ! -f "docker-compose.yml" ]; then
-    export COMPOSE_FILE="${BASEDIR}/docker-compose.yml"
-  fi
-fi
+# if [ -z "${COMPOSE_FILE}" ]; then
+#   if [ ! -f "docker-compose.yml" ]; then
+#     export COMPOSE_FILE="${BASEDIR}/docker-compose.yml"
+#   fi
+# fi
 
 # ensure the user env is correctly set up
 env_check
