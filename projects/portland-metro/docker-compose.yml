@@ -9,15 +9,23 @@ services:
   libpostal_baseimage:
     image: pelias/libpostal_baseimage
     container_name: pelias_libpostal_baseimage
-    build: libpostal_baseimage
+  libpostal:
+    image: pelias/go-whosonfirst-libpostal
+    container_name: pelias_libpostal
+    restart: always
+    ports: [ "8080:8080" ]
+    networks: [ "pelias" ]
   schema:
-    image: pelias/schema
+    image: pelias/schema:portland-synonyms
     container_name: pelias_schema
     networks: [ "pelias" ]
     volumes:
       - "./pelias.json:/code/pelias.json"
+      - "./synonyms/custom_name.txt:/code/pelias/schema/synonyms/custom_name.txt"
+      - "./synonyms/custom_street.txt:/code/pelias/schema/synonyms/custom_street.txt"
   api:
-    image: pelias/api:staging
+    depends_on: [ "libpostal_baseimage" ]
+    image: pelias/api:master
     container_name: pelias_api
     restart: always
     environment: [ "PORT=4000" ]
@@ -25,12 +33,7 @@ services:
     networks: [ "pelias" ]
     volumes:
       - "./pelias.json:/code/pelias.json"
-  libpostal:
-    image: pelias/go-whosonfirst-libpostal
-    container_name: pelias_libpostal
-    restart: always
-    ports: [ "8080:8080" ]
-    networks: [ "pelias" ]
+      - "libpostaldata:/usr/share/libpostal"
   placeholder:
     image: pelias/placeholder
     container_name: pelias_placeholder
@@ -49,7 +52,7 @@ services:
       - "./pelias.json:/code/pelias.json"
       - "${DATA_DIR}:/data"
   openstreetmap:
-    image: pelias/openstreetmap
+    image: pelias/openstreetmap:airport_codes
     container_name: pelias_openstreetmap
     networks: [ "pelias" ]
     volumes:
@@ -62,24 +65,13 @@ services:
     volumes:
       - "./pelias.json:/code/pelias.json"
       - "${DATA_DIR}:/data"
-#  Leave geonames out of the default build, uncomment if desired
-#  geonames:
-#    depends_on: [ "whosonfirst" ]
-#    image: pelias/geonames
-#    container_name: pelias_geonames
-#    networks: [ "pelias" ]
-#    volumes:
-#      - "./pelias.json:/code/pelias.json"
-#      - "${DATA_DIR}:/data"
-#  Use the pbf polyline extractor written by Peter for now because it's much faster
-#  valhalla:
-#    image: pelias/valhalla
-#    container_name: pelias_valhalla
-#    build: imports/valhalla
-#    restart: always
-#    networks: [ "pelias" ]
-#    volumes:
-#      - "${DATA_DIR}:/data"
+  transit:
+    image: pelias/transit:master
+    container_name: pelias_transit
+    networks: [ "pelias" ]
+    volumes:
+      - "./pelias.json:/code/pelias.json"
+      - "${DATA_DIR}:/data"
   polylines:
     image: pelias/polylines
     container_name: pelias_polylines
@@ -99,7 +91,7 @@ services:
       - "./pelias.json:/code/pelias.json"
       - "libpostaldata:/usr/share/libpostal"
       - "${DATA_DIR}:/data"
-  pip-service:
+  pip:
     image: pelias/pip-service
     container_name: pelias_pip-service
     restart: always
@@ -121,7 +113,6 @@ services:
   elasticsearch:
     image: pelias/elasticsearch
     container_name: pelias_elasticsearch
-    build: elasticsearch/2.4
     restart: always
     ports: [ "9200:9200", "9300:9300" ]
     networks: [ "pelias" ]
