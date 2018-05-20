@@ -1,4 +1,5 @@
 #!/bin/bash
+set -ex
 
 # load DATA_DIR and other vars from docker-compose .env file
 export $(cat .env | xargs)
@@ -19,10 +20,10 @@ fi
 docker-compose run --rm schema npm run create_index
 
 # download all the data to be used by imports
-docker-compose run --rm whosonfirst npm run download &
-docker-compose run --rm openaddresses npm run download &
-docker-compose run --rm openstreetmap npm run download &
-docker-compose run --rm interpolation npm run download-tiger &
+time docker-compose run --rm whosonfirst npm run download
+time docker-compose run --rm openaddresses npm run download
+time docker-compose run --rm openstreetmap npm run download
+time docker-compose run --rm interpolation npm run download-tiger
 
 wait
 
