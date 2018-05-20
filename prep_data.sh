@@ -35,6 +35,9 @@ docker-compose run --rm polylines bash ./docker_extract.sh
 docker-compose run --rm placeholder npm run extract
 docker-compose run --rm placeholder npm run build
 
+# libpostal is required for  the interpolation build
+docker-compose up -d libpostal;
+
 docker-compose run --rm interpolation bash ./docker_build.sh &
 docker-compose run --rm whosonfirst npm start
 docker-compose run --rm openaddresses npm start
