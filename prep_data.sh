@@ -19,6 +19,7 @@ fi
 # create the index in elasticsearch before importing data
 docker-compose run --rm schema npm run create_index
 
+
 # download all the data to be used by imports
 time docker-compose run --rm whosonfirst npm run download
 time docker-compose run --rm openaddresses npm run download
@@ -37,6 +38,9 @@ docker-compose run --rm placeholder npm run build
 
 # libpostal is required for  the interpolation build
 docker-compose up -d libpostal;
+
+# give libpostal time to start up
+sleep 30
 
 docker-compose run --rm interpolation bash ./docker_build.sh &
 docker-compose run --rm whosonfirst npm start
