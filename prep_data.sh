@@ -31,7 +31,7 @@ wait
 # polylines data prep requires openstreetmap data, so wait until that's done to start this
 # but then wait to run the polylines importer process until this is finished
 #docker-compose run --rm valhalla bash ./docker_build.sh
-docker-compose run --rm polylines bash ./docker_extract.sh
+#docker-compose run --rm polylines bash ./docker_extract.sh
 
 docker-compose run --rm placeholder npm run extract
 docker-compose run --rm placeholder npm run build
