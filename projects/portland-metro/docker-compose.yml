@@ -82,8 +82,8 @@ services:
       - "libpostaldata:/usr/share/libpostal"
       - "${DATA_DIR}:/data"
   pip:
-    image: pelias/pip-service
-    container_name: pelias_pip-service:master
+    image: pelias/pip-service:master
+    container_name: pelias_pip-service
     restart: always
     environment: [ "PORT=4200" ]
     ports: [ "4200:4200" ]
@@ -91,8 +91,8 @@ services:
       - "./pelias.json:/code/pelias.json"
       - "${DATA_DIR}:/data"
   document-service:
-    image: pelias/document-service
-    container_name: pelias_document-service:master
+    image: pelias/document-service:master
+    container_name: pelias_document-service
     restart: always
     ports: [ "5000:5000" ]
     volumes:
