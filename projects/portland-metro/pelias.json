@@ -147,8 +147,13 @@
         "tiger": {
           "datapath": "/data/tiger",
           "states": [
-            { "state_code": 41 },
-            { "state_code": 53 }
+            { "state_code": 41, "county_code": 67, "name": "Washington County, OR" },
+            { "state_code": 41, "county_code": 51, "name": "Multnomah County, OR" },
+            { "state_code": 41, "county_code": 5,  "name": "Clackamas County, OR" },
+            { "state_code": 41, "county_code": 71, "name": "Yamhill County, OR" },
+            { "state_code": 41, "county_code": 47, "name": "Marion County, OR" },
+            { "state_code": 41, "county_code": 53, "name": "Polk County, OR" },
+            { "state_code": 53, "county_code": 11, "name": "Clark County, WA" }
           ]
         }
       }
