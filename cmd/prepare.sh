@@ -18,6 +18,7 @@ function prepare_all(){
   prepare_polylines &
   prepare_placeholder &
   wait
+  prepare_interpolation
 }
 
 register 'prepare' 'all' 'build all services which have a prepare step' prepare_all
