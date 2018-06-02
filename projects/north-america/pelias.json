@@ -1886,12 +1886,7 @@
     },
     "whosonfirst": {
       "datapath": "/data/whosonfirst",
-      "importVenues": false,
-      "importPostalcodes": true,
-      "importPlace": [
-        "85688513",
-        "85688623"
-      ]
+      "importPostalcodes": true
     },
     "interpolation": {
       "download": {
