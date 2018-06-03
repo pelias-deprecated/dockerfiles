@@ -47,7 +47,7 @@ services:
       - "./pelias.json:/code/pelias.json"
       - "${DATA_DIR}:/data"
   openstreetmap:
-    image: pelias/openstreetmap:dep-updates
+    image: pelias/openstreetmap:master
     container_name: pelias_openstreetmap
     volumes:
       - "./pelias.json:/code/pelias.json"
