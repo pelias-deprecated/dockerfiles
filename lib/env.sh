@@ -24,7 +24,7 @@ function env_check(){
 # loads environment vars from a stream (such as a file)
 # example: env_load_stream < .env
 function env_load_stream(){
-  while IFS='=' read -r key value; do
+  grep -v '^$\|^\s*$\#' - | while IFS='=' read -r key value; do
     ([ -z $key ] || [ -z $value ]) && printf 'Invalid environment var "%s=%s"\n' $key $value && exit 1
     if [ -z ${!key} ]; then
       export "${key}=${value}"
