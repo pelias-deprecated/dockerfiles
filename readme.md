@@ -1,3 +1,12 @@
+
+:warning: This repository has been deprecated in favour of https://github.com/pelias/docker.
+
+:warning: We strongly recommended you to migrate any code referencing this repository to use https://github.com/pelias/docker as soon as possible.
+
+:warning: You can find more information about why we deprecated this code along with a migration guide in the wiki: https://github.com/pelias/dockerfiles/wiki/Deprecation-Notice
+
+---
+
 # Pelias Dockerfiles
 
 This is a [Docker Compose](https://github.com/docker/compose#docker-compose) based demo application for running the [Pelias Geocoder](https://github.com/pelias/pelias).
